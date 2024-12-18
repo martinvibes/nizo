@@ -4,7 +4,7 @@ import TransactionsHistory from "./transaction-history";
 
 function Transactions() {
   return (
-    <section className="border flex justify-between flex-col p-2 gap-4">
+    <section className="flex justify-between flex-col gap-4">
       <AvailableFeatures />
       <TransactionsHistory/>
     </section>
