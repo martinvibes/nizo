@@ -1,3 +1,4 @@
+import Dashboard from "@/components/dashboard/dashboard";
 import { ModeToggle } from "@/components/ui/dark-mode-toggle";
 
 export default function Home() {
@@ -5,6 +6,7 @@ export default function Home() {
     <div>
       <p>china will be great</p>
       <ModeToggle />
+      <Dashboard/>
     </div>
 
 
