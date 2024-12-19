@@ -18,10 +18,10 @@ function Dashboard() {
   // }
 
   return (
-    <section className="grid h-screen grid-cols-[1fr_3fr_1fr] md:grid-cols-[1.5fr_4fr_1.5fr] sm:gap-1 pt-4">
-      <UserData/>
-      <Chat/>
-      <Transactions/>
+    <section className="grid h-screen sm:grid-cols-[4fr_3fr] max-[480px]:grid-cols-[1fr]  md:grid-cols-[1.5fr_4fr_1.5fr] sm:gap-1 pt-4">
+      <UserData />
+      <Chat />
+      <Transactions transactions={transactionHistory} />
     </section>
   );
 }
