@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { useLangchainAiResponse } from "@/api/langchain";
+import Dashboard from "@/components/dashboard/dashboard";
+import NavBar from "@/components/dashboard/navbar";
 
 export default function Home() {
   const [question, setQuestion] = useState("");
@@ -24,6 +26,8 @@ export default function Home() {
         />
         <button type="submit">run</button>
       </form>
+      <NavBar />
+      <Dashboard />
     </div>
   );
 }
