@@ -1,14 +1,11 @@
 import Dashboard from "@/components/dashboard/dashboard";
-import { ModeToggle } from "@/components/ui/dark-mode-toggle";
+import NavBar from "@/components/dashboard/navbar";
 
 export default function Home() {
   return (
     <div>
-      <p>china will be great</p>
-      <ModeToggle />
-      <Dashboard/>
+      <NavBar />
+      <Dashboard />
     </div>
-
-
   );
 }
