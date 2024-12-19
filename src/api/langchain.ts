@@ -7,7 +7,11 @@ import {
   MemorySaver,
 } from "@langchain/langgraph";
 import { z } from "zod";
+// import { v4 as uuidv4 } from "uuid";
+
 export async function useLangchainAiResponse(question: string) {
+  // const config = { configurable: { thread_id: uuidv4() } };
+
   const model = new ChatOpenAI({
     model: "gpt-4o-mini",
     temperature: 0,
@@ -34,6 +38,27 @@ export async function useLangchainAiResponse(question: string) {
   });
   const structuredLlm = model.withStructuredOutput(IntentSchema);
   try {
+    // Define the function that calls the model
+    // const callModel = async (state: typeof MessagesAnnotation.State) => {
+    //   const response = await structuredLlm.invoke(state.messages);
+    //   // Update message history with response:
+    //   return { messages: response };
+    // };
+
+    // Define a new graph
+    // const workflow = new StateGraph(MessagesAnnotation)
+    //   // Define the (single) node in the graph
+    //   .addNode("model", callModel)
+    //   .addEdge(START, "model")
+    //   .addEdge("model", END);
+
+    // // Add memory
+    // const memory = new MemorySaver();
+    // const app = workflow.compile({ checkpointer: memory });
+
+    // const output = await app.invoke({ messages: input }, config);
+    // const intentResult = await app.invoke({ messages: question }, config);
+    // console.log(intentResult.messages[intentResult.messages.length - 1]);
     const intentResult = await structuredLlm.invoke(question);
     return intentResult;
   } catch (error) {
