@@ -1,15 +1,15 @@
 "use client";
 import React, { useState } from "react";
-import { useLangchainAiResponse } from "@/api/langchain";
+import { UseLangchainAiResponse } from "@/api/langchain";
 import Dashboard from "@/components/dashboard/dashboard";
 import NavBar from "@/components/dashboard/navbar";
 
 export default function Home() {
   const [question, setQuestion] = useState("");
 
-  async function handleSubmit(e: any) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const response = await useLangchainAiResponse(question);
+    const response = await UseLangchainAiResponse(question);
     console.log(response);
   }
   return (

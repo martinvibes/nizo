@@ -1,15 +1,15 @@
 import { ChatOpenAI } from "@langchain/openai";
-import {
-  START,
-  END,
-  MessagesAnnotation,
-  StateGraph,
-  MemorySaver,
-} from "@langchain/langgraph";
+// import {
+//   START,
+//   END,
+//   MessagesAnnotation,
+//   StateGraph,
+//   MemorySaver,
+// } from "@langchain/langgraph";
 import { z } from "zod";
 // import { v4 as uuidv4 } from "uuid";
 
-export async function useLangchainAiResponse(question: string) {
+export async function UseLangchainAiResponse(question: string) {
   // const config = { configurable: { thread_id: uuidv4() } };
 
   const model = new ChatOpenAI({
@@ -70,24 +70,24 @@ export async function useLangchainAiResponse(question: string) {
   }
 }
 
-const websiteContext = `
-Website Overview:
-- Purpose: Decentralized Finance (DeFi) Platform
-- Key Features:
-  1. Token Swapping
-  2. Balance Checking
-  3. Token Transfers
-  4. Real-time Market Information
+// const websiteContext = `
+// Website Overview:
+// - Purpose: Decentralized Finance (DeFi) Platform
+// - Key Features:
+//   1. Token Swapping
+//   2. Balance Checking
+//   3. Token Transfers
+//   4. Real-time Market Information
 
-Supported Actions:
-- Swap tokens between different cryptocurrencies
-- Check wallet balances
-- Transfer tokens between wallets
-- View current market rates and trends
+// Supported Actions:
+// - Swap tokens between different cryptocurrencies
+// - Check wallet balances
+// - Transfer tokens between wallets
+// - View current market rates and trends
 
-Technical Capabilities:
-- Secure blockchain-based transactions
-- Multi-chain support
-- Low transaction fees
-- Real-time price tracking
-`;
+// Technical Capabilities:
+// - Secure blockchain-based transactions
+// - Multi-chain support
+// - Low transaction fees
+// - Real-time price tracking
+// `;
