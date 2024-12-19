@@ -8,7 +8,5 @@ export default function Home() {
       <ModeToggle />
       <Dashboard/>
     </div>
-
-
   );
 }
