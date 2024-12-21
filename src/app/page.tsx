@@ -55,7 +55,7 @@ export default function Home() {
   }
   return (
     <div>
-      <p>china will be great</p>
+      {/* <p>china will be great</p>
       <form onSubmit={handleSubmit} action="">
         <input
           placeholder="wtite am here"
@@ -66,8 +66,8 @@ export default function Home() {
           }}
         />
         <button type="submit">run</button>
-      </form>
-      <TokenSwapComponent />
+      </form> */}
+      {/* <TokenSwapComponent /> */}
       <NavBar />
       <Dashboard />
     </div>
