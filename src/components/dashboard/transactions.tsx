@@ -1,12 +1,16 @@
 import AvailableFeatures from "./available-transaction";
 import TransactionsHistory from "./transaction-history";
 
+interface transactionHistory {
+  transactions:string[]
+}
 
-function Transactions() {
+const Transactions = (props:transactionHistory) => {
+
   return (
-    <section className="flex justify-between flex-col gap-4">
+    <section className="hidden sm:flex justify-between flex-col gap-4 ">
       <AvailableFeatures />
-      <TransactionsHistory/>
+      <TransactionsHistory transactions={props.transactions} />
     </section>
   );
 }
