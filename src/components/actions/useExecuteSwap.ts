@@ -1,5 +1,5 @@
-import { UseLangchainAiResponse } from '@/api/langchain';
-import React from 'react'
+// import { UseLangchainAiResponse } from '@/api/langchain';
+// import React from 'react'
 interface propsData {
     intent: string,
     propsamount: number,
@@ -11,8 +11,8 @@ export const useExecuteSwap = ({intent, propsamount, propssourceToken, propsdest
     switch (intent) {
       case "swap":
         // await executeSwap(result);
-        if (propsamount) {
-          const lamports = Math.round(propsamount * 1000000000);
+        if (propsamount || propssourceToken || propsdestinationToken) {
+          // const lamports = Math.round(propsamount * 1000000000);
           console.log("this is an intent to swap tokens");
         } else {
           console.error("Amount is undefined");
