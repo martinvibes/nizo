@@ -60,7 +60,15 @@ export async function UseLangchainAiResponse(question: string) {
     // const intentResult = await app.invoke({ messages: question }, config);
     // console.log(intentResult.messages[intentResult.messages.length - 1]);
     const intentResult = await structuredLlm.invoke(question);
-    return intentResult;
+    // return intentResult;
+    return {
+      intent: intentResult.intent,
+      amount: intentResult.amount,
+      sourceToken: intentResult.sourceToken,
+      destinationToken: intentResult.destinationToken,
+      error: intentResult.error,
+      generalResponse: intentResult.generalResponse,
+    }
   } catch (error) {
     console.error("Error processing request:", error);
     return {
