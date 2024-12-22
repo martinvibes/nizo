@@ -1,18 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useJupiterSwap } from '@/api/jupiter-swap-example';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
-const TokenSwapComponent = () => {
-  const [inputAmount, setInputAmount] = useState('');
-  const [inputToken, setInputToken] = useState('So11111111111111111111111111111111111111112');
-  const [outputToken, setOutputToken] = useState('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
+const useTokenSwap = () => {
   const [txResult, setTxResult] = useState('');
-  
   const { connected } = useWallet();
   const { swap, error, loading } = useJupiterSwap("https://api.mainnet-beta.solana.com");
 
-  const handleSwap = async () => {
+  const handleSwap = async (inputAmount: string, inputToken: string, outputToken: string) => {
     try {
       if (!connected) {
         setTxResult('Please connect your wallet first');
@@ -28,7 +23,7 @@ const TokenSwapComponent = () => {
 
       // Convert input amount to lamports (multiply by 10^9 for SOL)
       const lamports = Math.round(amount * 1000000000);
-      
+
       console.log('Swapping with params:', {
         inputAmount: lamports,
         inputMint: inputToken,
@@ -42,91 +37,64 @@ const TokenSwapComponent = () => {
         slippageBps: 50
       });
 
-      setTxResult(`Swap successful! Transaction: ${txid}`);
+      setTxResult(`Swap successful! Transaction: https://explorer.solana.com/tx/${txid}`);
     } catch (err: any) {
       setTxResult(`Swap failed: ${err.message}`);
     }
   };
 
-  // Predefined token list with verified addresses
-  const tokenOptions = [
-    { label: 'SOL', value: 'So11111111111111111111111111111111111111112' },
-    { label: 'USDC', value: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v' },
-    { label: 'BONK', value: 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263' }
-  ];
-
-  return (
-    <div className="p-4 max-w-md mx-auto bg-white rounded-lg shadow">
-  
-
-      <h2 className="text-2xl font-bold mb-4">Swap Tokens</h2>
-      
-      {/* <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium mb-1">Amount</label>
-          <input
-            type="number"
-            value={inputAmount}
-            onChange={(e) => setInputAmount(e.target.value)}
-            className="w-full p-2 border rounded"
-            placeholder="Enter amount"
-            min="0"
-            step="0.000000001"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">From Token</label>
-          <select
-            value={inputToken}
-            onChange={(e) => setInputToken(e.target.value)}
-            className="w-full p-2 border rounded"
-          >
-            {tokenOptions.map(token => (
-              <option key={token.value} value={token.value}>
-                {token.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">To Token</label>
-          <select
-            value={outputToken}
-            onChange={(e) => setOutputToken(e.target.value)}
-            className="w-full p-2 border rounded"
-          >
-            {tokenOptions.map(token => (
-              <option key={token.value} value={token.value}>
-                {token.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <button
-          onClick={handleSwap}
-          disabled={loading || !inputAmount || !connected}
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
-        >
-          {!connected ? 'Connect Wallet First' : loading ? 'Swapping...' : 'Swap'}
-        </button>
-
-        {error && (
-          <div className="text-red-600 text-sm mt-2">
-            {error}
-          </div>
-        )}
-
-        {txResult && (
-          <div className="text-sm mt-2 p-2 bg-gray-100 rounded">
-            {txResult}
-          </div>
-        )}
-      </div> */}
-    </div>
-  );
+  return {
+    handleSwap,
+    txResult,
+    error,
+    loading
+  };
 };
 
-export default TokenSwapComponent;
+export default useTokenSwap;
+
+// Example usage of useTokenSwap hook
+// import React, { useState } from 'react';
+// import useTokenSwap from './swap';
+
+// const SwapComponent = () => {
+//   const { handleSwap, txResult, error, loading } = useTokenSwap();
+//   const [inputAmount, setInputAmount] = useState('');
+//   const [inputToken, setInputToken] = useState('');
+//   const [outputToken, setOutputToken] = useState('');
+
+//   const onSwapClick = async () => {
+//     await handleSwap(inputAmount, inputToken, outputToken);
+//     console.log(txResult);
+//   };
+
+//   return (
+//     <div>
+//       <input
+//         type="text"
+//         placeholder="Input Amount"
+//         value={inputAmount}
+//         onChange={(e) => setInputAmount(e.target.value)}
+//       />
+//       <input
+//         type="text"
+//         placeholder="Input Token"
+//         value={inputToken}
+//         onChange={(e) => setInputToken(e.target.value)}
+//       />
+//       <input
+//         type="text"
+//         placeholder="Output Token"
+//         value={outputToken}
+//         onChange={(e) => setOutputToken(e.target.value)}
+//       />
+//       <button onClick={onSwapClick} disabled={loading}>
+//         Swap
+//       </button>
+//       {txResult && <p>{txResult}</p>}
+//       {error && <p>Error: {error.message}</p>}
+//     </div>
+//   );
+// };
+
+// export default SwapComponent;

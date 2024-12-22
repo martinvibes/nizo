@@ -3,11 +3,13 @@ import React, { useState } from "react";
 import sendbtn from "./sendbtn.svg";
 import Image from "next/image";
 import { useMessages } from "@/contexts/store";
+import { UseLangchainAiResponse } from "@/api/langchain";
+import { useExecuteSwap } from "../actions/useExecuteSwap";
 export const Chatinputdiv = () => {
   const { setMessages } = useMessages();
   const [input, setInput] = useState("");
 
-  const handleInputSubmit = () => {
+  const handleInputSubmit = async () => {
     if (input.trim() === "") return;
     setMessages((prevMessages) => [
       ...prevMessages,
@@ -18,6 +20,43 @@ export const Chatinputdiv = () => {
       },
     ]);
     setInput("");
+    const airesponse = await UseLangchainAiResponse(input);
+    console.log(airesponse);
+
+    // Then add AI's response to messages
+    if (airesponse?.generalResponse) {
+        setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+                id: (prevMessages.length + 1).toString(),
+                sender: "agent",
+                content: airesponse.generalResponse,
+            },
+        ]);
+    }
+
+    
+    switch (airesponse.intent) {
+      case "swap":
+        console.log("Swap intent detected");
+        await useExecuteSwap(airesponse);
+        break;
+      case "checkBalance":
+        console.log("Check balance intent detected");
+        break;
+      case "transfer":
+        console.log("Transfer intent detected");
+        break;
+      case "normalChat":
+        console.log("Normal chat intent detected");
+        break;
+      case "unknown":
+        console.log("Unknown intent");
+        break;
+      default:
+        console.log("Unknown intent");
+        break;
+    }
   };
 
   const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>): void => {
