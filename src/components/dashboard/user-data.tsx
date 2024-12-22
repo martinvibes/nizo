@@ -32,7 +32,7 @@ function UserData() {
 
   return (
     <div
-      className=" bg-[#2B2B2B] flex-col gap-8 pt-10 px-3 hidden md:flex invisible"
+      className="bg-[#1A1C24] flex-col gap-8 pt-10 px-3 hidden md:flex invisible"
       ref={containerRef}
     >
       <AvatarDemo />

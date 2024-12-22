@@ -34,7 +34,7 @@ function TransactionsHistory(props:transactionHistory) {
   return (
     <Card
       ref={cardRef}
-      className="h-1/2 bg-[#2B2B2B] rounded-md flex flex-col gap-3 py-7 px-6 overflow-y-auto scrollbar-hide invisible"
+      className="h-1/2 bg-[#1A1C24] rounded-md flex flex-col gap-3 py-7 px-6 overflow-y-auto scrollbar-hide invisible"
     >
       <h1 className="text-base font-semibold text-white text-center">
         Action Tab
