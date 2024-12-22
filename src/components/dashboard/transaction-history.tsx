@@ -39,10 +39,10 @@ function TransactionsHistory(props:transactionHistory) {
       <h1 className="text-base font-semibold text-white text-center">
         Action Tab
       </h1>
-      <ul className="list-disc marker:text-white grid gap-y-2">
+      <ul className="list-disc marker:text-white grid gap-y-2 mx-auto">
         {props.transactions.map((data, index) => {
           return (
-            <li className="text-sm font-semibold text-[#51586D] animate-fade-up" key={index}>
+            <li className="text-sm font-semibold text-[#51586D]" key={index}>
               {data}
             </li>
           );
