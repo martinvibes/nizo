@@ -22,9 +22,9 @@ export async function UseLangchainAiResponse(question: string) {
       - If it's a DeFi action (swap, check balance), extract specific parameters
       - For general questions about the platform, use the provided website context
       - Handle various types of inputs flexibly
-      - Provide clear, concise, and helpful responses`;
+      - Provide clear, enguaging concise, and helpful responses`;
 
-  const generalResponseDesc = ` Examine the feedback provided by the user and craft a response that is easy to understand, addressing their prompt thoughtfully. `;
+  const generalResponseDesc = ` Examine the feedback provided by the user and craft a response that is easy to understand, addressing their prompt thoughtfully. Alo make it enguaging `;
 
   const IntentSchema = z.object({
     intent: z
@@ -60,7 +60,15 @@ export async function UseLangchainAiResponse(question: string) {
     // const intentResult = await app.invoke({ messages: question }, config);
     // console.log(intentResult.messages[intentResult.messages.length - 1]);
     const intentResult = await structuredLlm.invoke(question);
-    return intentResult;
+    // return intentResult;
+    return {
+      intent: intentResult.intent,
+      amount: intentResult.amount,
+      sourceToken: intentResult.sourceToken,
+      destinationToken: intentResult.destinationToken,
+      error: intentResult.error,
+      generalResponse: intentResult.generalResponse,
+    }
   } catch (error) {
     console.error("Error processing request:", error);
     return {

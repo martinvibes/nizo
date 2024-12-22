@@ -1,7 +1,12 @@
 "use client";
 
 import { WalletAdapterProvider } from "./WalletProvider";
+import { MessageProvider } from "./store";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
-  return <WalletAdapterProvider>{children}</WalletAdapterProvider>;
+  return (
+    <WalletAdapterProvider>
+      <MessageProvider>{children}</MessageProvider>
+    </WalletAdapterProvider>
+  );
 };
