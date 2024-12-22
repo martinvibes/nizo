@@ -38,8 +38,8 @@ const useTokenSwap = () => {
       });
 
       setTxResult(`Swap successful! Transaction: https://explorer.solana.com/tx/${txid}`);
-    } catch (err: any) {
-      setTxResult(`Swap failed: ${err.message}`);
+    } catch (err) {
+      setTxResult(`Swap failed: ${(err as Error).message}`);
     }
   };
 

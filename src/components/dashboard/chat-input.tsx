@@ -4,10 +4,14 @@ import sendbtn from "./sendbtn.svg";
 import Image from "next/image";
 import { useMessages } from "@/contexts/store";
 import { UseLangchainAiResponse } from "@/api/langchain";
-import { useExecuteSwap } from "../actions/useExecuteSwap";
+import useTokenSwap from "./swap";
 export const Chatinputdiv = () => {
   const { setMessages } = useMessages();
   const [input, setInput] = useState("");
+  const { handleSwap} = useTokenSwap(); // , txResult, error, loading 
+  const [inputAmount, setInputAmount] = useState("");
+  const [inputToken, setInputToken] = useState("");
+  const [outputToken, setOutputToken] = useState("");
 
   const handleInputSubmit = async () => {
     if (input.trim() === "") return;
@@ -25,21 +29,32 @@ export const Chatinputdiv = () => {
 
     // Then add AI's response to messages
     if (airesponse?.generalResponse) {
-        setMessages((prevMessages) => [
-            ...prevMessages,
-            {
-                id: (prevMessages.length + 1).toString(),
-                sender: "agent",
-                content: airesponse.generalResponse,
-            },
-        ]);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          id: (prevMessages.length + 1).toString(),
+          sender: "agent",
+          content: airesponse.generalResponse,
+        },
+      ]);
     }
 
-    
+
+
     switch (airesponse.intent) {
       case "swap":
-        console.log("Swap intent detected");
-        await useExecuteSwap(airesponse);
+        if (
+          airesponse.amount ||
+          airesponse.sourceToken ||
+          airesponse.destinationToken
+        ) {
+          console.log("this is an intent to swap tokens");
+          console.log("Swap intent detected");
+          setInputAmount(airesponse.amount ? airesponse.amount.toString() : "");
+          setInputToken(airesponse.sourceToken ? airesponse.sourceToken.toString() : "");
+          setOutputToken(airesponse.destinationToken ? airesponse.destinationToken.toString() : "");
+          await handleSwap(inputAmount, inputToken, outputToken);
+        }
         break;
       case "checkBalance":
         console.log("Check balance intent detected");
