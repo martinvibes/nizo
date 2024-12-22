@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="md:p-2">
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
