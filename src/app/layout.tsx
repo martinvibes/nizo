@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "@/contexts/Providers";
 
@@ -15,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="md:p-2">
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
