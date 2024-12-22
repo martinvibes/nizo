@@ -38,11 +38,11 @@ function AddContact(props: close) {
   return (
     <>
       <div
-        className="absolute w-full h-screen bg-[#2B2B2B]/50 z-[60] backdrop-blur-md m-0"
+        className="absolute w-full h-screen bg-[#1A1C24]/50 z-[60] backdrop-blur-md m-0"
         onClick={() => props.close()}
       />
       <form
-        className="bg-[#2B2B2B] absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%] rounded-md p-4 py-10  grid gap-5 w-[60%] min-w-80  md:w-[40%] max-w-xl z-[70]"
+        className="bg-[#1A1C24] absolute top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%] rounded-md p-4 py-10  grid gap-5 w-[60%] min-w-80  md:w-[40%] max-w-xl z-[70]"
         onClick={(e) => handleSubmit(e)}
       >
         <div
@@ -76,7 +76,10 @@ function AddContact(props: close) {
             id="address"
             className="border-[#3D435C] border outline-none p-3 rounded-sm"
           />
-          <Button type="submit" className="bg-[#13151D] border border-[#3D435C] text-[#51586D] text-base font-semibold capitalize mt-4 py-5">
+          <Button
+            type="submit"
+            className="bg-[#13151D] border border-[#3D435C] text-[#51586D] text-base font-semibold capitalize mt-4 py-5"
+          >
             add address
           </Button>
         </div>

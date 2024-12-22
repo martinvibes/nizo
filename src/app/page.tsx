@@ -31,7 +31,6 @@ export default function Home() {
       if (count < character.length) {
         setResponse((prev) => prev + character[count]); // Append the current character
         setCount((prev) => prev + 1); // Move to the next character
-        console.log(character[count]);
       } else {
         clearInterval(interval); // Clear the interval once all characters are processed
       }
@@ -40,7 +39,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [count, character]);
   return (
-    <div className="px-4">
+    <div className="px-4 text-[#F9F9F9]">
       <section className="md:px-24">
         <header className="grid gap-3 place-content-center text-[#F9F9F9] h-3/5 items-center text-center py-24">
           <h1 className="font-semibold text-base sm:text-xl">NIZO AI</h1>
