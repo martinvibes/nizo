@@ -93,10 +93,11 @@ const NavBar = () => {
                 </h1>
               </Link>
             </div>
-            <div className="flex items-center gap-4">
-              <ContactIcon close={contactListHandle} />
-              <h2 className=" ">
-                Balance: {connected ? balance + " SOL" : "0"}
+            <div className="flex items-center gap-2">
+              {connected ? <ContactIcon close={contactListHandle} /> : ""}
+
+              <h2 className="mr-2">
+                {connected ? " Balance: " + balance + " SOL" : ""}
               </h2>
               {/* <WalletMultiButton /> */}
               {!connected && (

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ArrowUpRightIcon } from "lucide-react";
+import NavBar from "@/components/layout/navbar";
 
 export default function Home() {
   const containerRef = useRef(null);
@@ -40,6 +41,7 @@ export default function Home() {
   }, [count, character]);
   return (
     <div className="px-4 text-[#F9F9F9]">
+      <NavBar />
       <section className="md:px-24">
         <header className="grid gap-3 place-content-center text-[#F9F9F9] h-3/5 items-center text-center py-24">
           <h1 className="font-semibold text-base sm:text-xl">NIZO AI</h1>

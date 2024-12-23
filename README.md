@@ -1,10 +1,10 @@
 # NIZO - AI-Powered DeFi Agent
 
-
-**NIZO** is an intelligent AI agent that simplifies DeFi operations on the Solana blockchain through natural language interactions. Built with Next.js and integrated with LangChain for AI processing, NIZO enables users to perform complex DeFi transactions, check balances, and receive information through an intuitive chat interface.
+**NIZO** is an intelligent AI agent that simplifies DeFi operations on the Solana blockchain through natural language interactions. Built with Next.js and integrated with LangChain for AI processing, Jupiter swap api, NIZO enables users to perform complex DeFi transactions, check balances, and receive information through an intuitive chat interface.
 
 🏆 Built for the Solana AI Hackathon (December 10-23, 2024)
-    This project is our submission to the first-ever Solana AI Hackathon, where developers worldwide compete to build innovative AI agents on the Solana blockchain. The hackathon features $185,000+ in cash prizes across multiple tracks focusing on AI agent development.
+This project is our submission to the first-ever Solana AI Hackathon, where developers worldwide compete to build innovative AI agents on the Solana blockchain. The hackathon features $185,000+ in cash prizes across multiple tracks focusing on AI agent development.
+
 ## 🌐 Live Demo
 
 Try [NIZO](https://nizo-sol.vercel.app)
@@ -62,7 +62,7 @@ export const WalletAdapterProvider = ({ children }: Props) => {
 ```typescript
 // src/api/langchain.ts
 const IntentSchema = z.object({
-  intent: z.enum(['swap', 'checkBalance', 'transfer', 'normalChat', 'unknown']),
+  intent: z.enum(["swap", "checkBalance", "transfer", "normalChat", "unknown"]),
   amount: z.number().optional(),
   sourceToken: z.string().optional(),
   destinationToken: z.string().optional(),
@@ -91,7 +91,7 @@ const swap = async ({
 
 ```typescript
 const model = new ChatOpenAI({
-  model: 'gpt-4o-mini',
+  model: "gpt-4o-mini",
   temperature: 0,
   apiKey: process.env.NEXT_PUBLIC_LANGCHAIN_API_KEY,
 });
@@ -205,8 +205,8 @@ Based on the implementation in langchain.ts:
 
 ```typescript
 const FALLBACK_RPCS = [
-  'https://mainnet.helius-rpc.com/?api-key=YOUR_API_KEY',
-  'https://try-rpc.mainnet.solana.com',
+  "https://mainnet.helius-rpc.com/?api-key=YOUR_API_KEY",
+  "https://try-rpc.mainnet.solana.com",
   // ...
 ];
 ```
@@ -220,7 +220,7 @@ const FALLBACK_RPCS = [
 
 ```typescript
 // Example of transaction security measures
-const confirmation = await connection.confirmTransaction(txid, 'confirmed');
+const confirmation = await connection.confirmTransaction(txid, "confirmed");
 
 if (confirmation.value.err) {
   throw new Error(`Transaction failed: ${confirmation.value.err.toString()}`);
