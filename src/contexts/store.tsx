@@ -9,17 +9,22 @@ interface Message {
 }
 
 type MessageContextType = {
-    messages: Message[];
-    setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+  messages: Message[];
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  transactionType: string;
+  setTransactionType:React.Dispatch<React.SetStateAction<string>>;
 };
 
 const MessageContext = createContext<MessageContextType | undefined>(undefined);
 
 export function MessageProvider({ children }: { children: React.ReactNode }) {
     const [messages, setMessages] = useState<Message[]>([]);
-
+    const [isLoading,setIsLoading] = useState(false)
+    const [transactionType, setTransactionType] = useState("");
     return (
-        <MessageContext.Provider value={{ messages, setMessages }}>
+        <MessageContext.Provider value={{ messages, setMessages,isLoading,setIsLoading,transactionType,setTransactionType }}>
             {children}
         </MessageContext.Provider>
     );
