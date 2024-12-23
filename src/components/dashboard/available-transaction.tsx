@@ -28,7 +28,10 @@ function AvailabeFeatures() {
       });
    });
   return (
-    <Card ref={cardRef} className="h-1/2 bg-[#2B2B2B] rounded-md flex flex-col gap-3 pt-7 px-3 overflow-y-auto invisible">
+    <Card
+      ref={cardRef}
+      className="h-1/2 bg-[#1A1C24] rounded-md flex flex-col gap-3 pt-7 px-3 overflow-y-auto invisible"
+    >
       <h1 className="text-base font-semibold text-white text-center">
         Action Tab
       </h1>
