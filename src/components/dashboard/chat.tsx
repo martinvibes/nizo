@@ -1,40 +1,18 @@
 "use client";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useEffect, useRef, useState } from "react";
-// import DonutChart from "../ui/chart";
+import { useRef } from "react";
+import logo from "./logo.svg";
+import Image from "next/image";
+import { Poppins } from "next/font/google";
+import { Chatpage } from "./chat-page";
+// import { ChatInput } from "./chatinput";
+import { Chatinputdiv } from "./chat-input";
+
+const poppins = Poppins({ weight: ["400"], subsets: ["latin"] });
 
 function Chat() {
   const chatRef = useRef(null);
-  // declare text with let when you want to use
-  const text = "";
-  const character =text.split("");
-
-  const [response,setResponse] = useState("")
-  const [count, setCount] = useState(0);
-  //  const [data] = useState([
-  //    { name: "USDT", value: 1150 },
-  //    { name: "USDC", value: 1750 },
-  //    { name: "ETH", value: 800 },
-  //    { name: "STRK", value: 500 },
-  //    { name: "SOL", value: 500 },
-  //  ]);
-
-    useEffect(() => {
-      const interval = setInterval(() => {
-        if (count < character.length) {
-          setResponse((prev) => prev + character[count]); // Append the current character
-          setCount((prev) => prev + 1); // Move to the next character
-        } else {
-          clearInterval(interval); // Clear the interval once all characters are processed
-        }
-      }, 10);
-
-      return () => clearInterval(interval);
-    }, [count, character]);
-    // total balance
-    // const total = data.reduce((acc, item) => acc + item.value, 0);
-  console.log(response,text); 
   useGSAP(() => {
     gsap.set(chatRef.current, { y: -400, scale: 0 });
     gsap.to(chatRef.current, {
@@ -47,9 +25,30 @@ function Chat() {
       visibility: "visible",
     });
   });
+
   return (
-    <main ref={chatRef} className="border invisible">
-      {/* <DonutChart data={data} total={total} /> */}
+    <main ref={chatRef} className="invisible px-7 bg-black">
+      <div className="flex flex-col items-center gap-2 border-white">
+        <Image
+          width="40"
+          height="40"
+          src={logo.src}
+          className=" rounded-full border-white"
+          alt="langchain logo"
+        />
+        <p className={`${poppins.className} text-center text-sm`}>
+          Chat with <b className="bold text-lg">NIZO</b> AI{" "}
+        </p>
+        <hr className="border-[#3D435C] border w-full" />
+      </div>
+      <br />
+      <div className="flex gap-2 flex-col">
+        {/* chat page */}
+        <Chatpage />
+
+        {/* chat input */}
+        <Chatinputdiv />
+      </div>
     </main>
   );
 }

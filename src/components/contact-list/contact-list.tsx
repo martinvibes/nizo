@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Xmark from "../icons/xmark";
@@ -53,7 +54,7 @@ function ContactList(props: close) {
       {isFormOpen && <AddContact close={formModalHandler} />}
       <section
         ref={containerRef}
-        className="bg-[#2B2B2B] h-3/4 w-[300px] p-3 scrollbar-hide overflow-y-auto fixed right-2 z-50 top-24 rounded-md py-8"
+        className="bg-[#1A1C24] h-3/4 w-[300px] p-3 scrollbar-hide overflow-y-auto fixed right-2 z-50 top-24 rounded-md py-8"
       >
         <div className="absolute right-6 top-3" onClick={() => props.close()}>
           <Xmark />
@@ -70,7 +71,9 @@ function ContactList(props: close) {
                     <h3 className="capitalize">
                       {data?.name}:
                       <span className="lowercase pl-2 text-[#51586D]">
-                        {` ${data?.address.slice(0, 5)}...${data?.address.slice(-5)}`}
+                        {` ${data?.address.slice(0, 5)}...${data?.address.slice(
+                          -5
+                        )}`}
                       </span>
                     </h3>
                   </li>

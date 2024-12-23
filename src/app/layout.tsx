@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "@/contexts/Providers";
+import Footer from "@/components/layout/footer";
 
 export const metadata: Metadata = {
   title: "NIZO",
@@ -23,6 +25,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Providers> {children}</Providers>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
