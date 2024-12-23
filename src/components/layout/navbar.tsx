@@ -9,7 +9,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
 } from "@radix-ui/react-dropdown-menu";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { CopyIcon, Wallet, LogOut } from "lucide-react";
 import Image from "next/image";
@@ -23,8 +23,10 @@ import ContactList from "../contact-list/contact-list";
 const NavBar = () => {
   const { setVisible } = useWalletModal();
   const { connected, disconnect, publicKey, wallet } = useWallet();
+  const { connection } = useConnection();
   const [slicedPublicKey, setSlicedPublicKey] = useState("");
-  const [isOpen,setIsOpen] = useState(false)
+  const [balance, setBalance] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (!publicKey) return setSlicedPublicKey("");
@@ -32,6 +34,38 @@ const NavBar = () => {
     const base58 = publicKey.toBase58();
     setSlicedPublicKey(base58.slice(0, 4) + ".." + base58.slice(-4));
   }, [publicKey]);
+
+  useEffect(() => {
+    const updateBalance = async () => {
+      try {
+        if (!connection || !publicKey) {
+          return console.error(
+            "Wallet not connected or connection unavailable"
+          );
+        }
+
+        connection.onAccountChange(
+          publicKey,
+          (updatedAccountInfo) => {
+            setBalance(updatedAccountInfo.lamports);
+          },
+          "confirmed"
+        );
+
+        const accountInfo = await connection.getAccountInfo(publicKey);
+
+        if (accountInfo) {
+          setBalance(accountInfo.lamports);
+        } else {
+          throw new Error("Account info not found");
+        }
+      } catch (error) {
+        console.error("Failed to retrieve account info:", error);
+      }
+    };
+
+    updateBalance();
+  }, [connection, publicKey]);
 
   // const { publicKey } = useWallet()
   // const balanceQuery = useGetBalance({ address: publicKey! })
@@ -42,8 +76,8 @@ const NavBar = () => {
   //   console.log('balanceQuery', balanceQuery.data)
   // }, [balanceQuery, publicKey])
 
-  function contactListHandle(){
-    setIsOpen(prev=>!prev)
+  function contactListHandle() {
+    setIsOpen((prev) => !prev);
   }
 
   return (
@@ -59,9 +93,12 @@ const NavBar = () => {
                 </h1>
               </Link>
             </div>
-            <div className="flex items-center gap-4">
-              <ContactIcon close={contactListHandle} />
-              <h2 className=" ">Balance</h2>
+            <div className="flex items-center gap-2">
+              {connected ? <ContactIcon close={contactListHandle} /> : ""}
+
+              <h2 className="mr-2">
+                {connected ? " Balance: " + balance + " SOL" : ""}
+              </h2>
               {/* <WalletMultiButton /> */}
               {!connected && (
                 <button

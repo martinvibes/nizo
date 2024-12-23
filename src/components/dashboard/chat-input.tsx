@@ -92,7 +92,7 @@ export const Chatinputdiv = () => {
         value={input}
         onChange={(e) => setInput(e.target.value)}
         placeholder="Type a message here"
-        className=" italic focus:outline-none focus:border-none"
+        className=" italic focus:outline-none focus:border-none bg-inherit"
         type="text"
       />
       <button
