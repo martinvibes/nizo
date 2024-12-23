@@ -15,9 +15,9 @@ export async function UseLangchainAiResponse(question: string) {
   const model = new ChatOpenAI({
     model: "gpt-4o-mini",
     temperature: 0,
-    // apiKey: process.env.NEXT_PUBLIC_LANGCHAIN_API_KEY,
-    apiKey:
-      "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",
+    apiKey: process.env.NEXT_PUBLIC_LANGCHAIN_API_KEY,
+    // apiKey:
+    //   "",
   });
 
   const formatInstructions = `Analyze the user's input and categorize it:
