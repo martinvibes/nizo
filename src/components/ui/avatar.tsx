@@ -2,8 +2,18 @@
 
 import * as React from "react";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
+// import img1 from "../../../public/photo.png"
+// import img2 from "../../../public/9306614.jpg";
+// import img3 from "../../../public/9334176.jpg";
+// import img4 from "../../../public/androgynous-avatar-non-binary-queer-person.jpg";
+import img6 from "../../../public/07771d2836880217ff2c85ae66cf6086.jpg";
+import img7 from "../../../public/268f2e1880d50ce1d3fae26914a48fc0.jpg";
+import img8 from "../../../public/b3fc7c6be2886d92faa00a378cdb5b1f.jpg";
+import img9 from "../../../public/e718b71961850ab945d39a3d2f2d72d6.jpg";
 
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+
 
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
@@ -48,12 +58,14 @@ const AvatarFallback = React.forwardRef<
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 
 function AvatarDemo() {
+  const array = [img6,img7,img8,img9];
+
+  const randomNumber = Math.floor(Math.random() * 8) + 1;
+  console.log(randomNumber);
   return (
     <Avatar className="w-[200px] h-[200px] mx-auto">
-      <AvatarImage
-        src="https://images.unsplash.com/photo-1728577740843-5f29c7586afe?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D"
-        alt="Colm Tuite"
-      />
+      {/* <AvatarImage src="../../../public/photo.png" alt="Colm Tuite" /> */}
+      <Image src={array[randomNumber]} alt="avatar"  />
       <AvatarFallback className="AvatarFallback" delayMs={600}>
         CT
       </AvatarFallback>

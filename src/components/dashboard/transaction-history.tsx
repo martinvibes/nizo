@@ -37,7 +37,7 @@ function TransactionsHistory(props:transactionHistory) {
       className="h-1/2 bg-[#1A1C24] rounded-md flex flex-col gap-3 py-7 px-6 overflow-y-auto scrollbar-hide invisible"
     >
       <h1 className="text-base font-semibold text-white text-center">
-        Action Tab
+        History Tab
       </h1>
       <ul className="list-disc marker:text-white grid gap-y-2 mx-auto">
         {props.transactions.map((data, index) => {

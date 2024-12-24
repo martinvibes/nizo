@@ -17,36 +17,16 @@ interface UseJupiterSwapReturn {
 
 // Using Helius or GenesysGo RPC endpoints as they're more reliable
 // You should replace this with your own RPC endpoint from a provider
-const FALLBACK_RPCS = [
-  "https://mainnet.helius-rpc.com/?api-key=YOUR_API_KEY",
-  "https://try-rpc.mainnet.solana.com",
-  "https://api.mainnet.rpcpool.com",
-  "https://solana-api.projectserum.com"
-];
-
-export const useJupiterSwap = (
-  rpcEndpoint?: string,
-): UseJupiterSwapReturn => {
+export const useJupiterSwap = (): UseJupiterSwapReturn => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const { publicKey, signTransaction, connected } = useWallet();
 
-  // Try to connect to multiple RPCs if the main one fails
   const tryConnect = async () => {
-    const endpoints = rpcEndpoint ? [rpcEndpoint, ...FALLBACK_RPCS] : FALLBACK_RPCS;
-    
-    for (const endpoint of endpoints) {
-      try {
-        const connection = new Connection(endpoint, 'confirmed');
-        // Test the connection
-        await connection.getLatestBlockhash();
-        return connection;
-      } catch (e) {
-        console.warn(`Failed to connect to RPC ${endpoint}`, e);
-        continue;
-      }
+    if (!process.env.NEXT_PUBLIC_SOL_RPC_URL) {
+      throw new Error("RPC URL not configured in environment variables");
     }
-    throw new Error("Unable to connect to any RPC endpoint");
+    return new Connection(process.env.NEXT_PUBLIC_SOL_RPC_URL, 'confirmed');
   };
 
   const swap = async ({
@@ -148,3 +128,29 @@ export const useJupiterSwap = (
 
   return { swap, error, loading };
 };
+
+// // Example usage of Jupiter Swap
+// const ExampleSwap = () => {
+//   const { swap, error, loading } = useJupiterSwap();
+
+//   const handleSwap = async () => {
+//     try {
+//       // Swap 1 SOL for USDC
+//       const txid = await swap({
+//         inputAmount: 1_000_000_000, // 1 SOL (in lamports)
+//         inputMint: "So11111111111111111111111111111111111111112", // SOL mint address
+//         outputMint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", // USDC mint address
+//         slippageBps: 50, // 0.5% slippage
+//       });
+//       console.log("Swap successful! Transaction ID:", txid);
+//     } catch (err) {
+//       console.error("Swap failed:", err);
+//     }
+//   };
+
+//   return (
+//     <button onClick={handleSwap} disabled={loading}>
+//       {loading ? "Swapping..." : "Swap SOL to USDC"}
+//     </button>
+//   );
+// };

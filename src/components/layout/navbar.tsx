@@ -9,7 +9,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
 } from "@radix-ui/react-dropdown-menu";
-import { useWallet, useConnection } from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { CopyIcon, Wallet, LogOut } from "lucide-react";
 import Image from "next/image";
@@ -19,13 +19,15 @@ import { Button } from "../ui/button";
 import { ChevronDown } from "lucide-react";
 import ContactIcon from "../icons/contacts-icon";
 import ContactList from "../contact-list/contact-list";
+import { useGetBalance } from "@/hook/useGetBalance";
 
 const NavBar = () => {
   const { setVisible } = useWalletModal();
   const { connected, disconnect, publicKey, wallet } = useWallet();
-  const { connection } = useConnection();
+  // const { connection } = useConnection();
+   // console.log(connection);
   const [slicedPublicKey, setSlicedPublicKey] = useState("");
-  const [balance, setBalance] = useState(0);
+  const {balance} = useGetBalance()
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -35,46 +37,6 @@ const NavBar = () => {
     setSlicedPublicKey(base58.slice(0, 4) + ".." + base58.slice(-4));
   }, [publicKey]);
 
-  useEffect(() => {
-    const updateBalance = async () => {
-      try {
-        if (!connection || !publicKey) {
-          return console.error(
-            "Wallet not connected or connection unavailable"
-          );
-        }
-
-        connection.onAccountChange(
-          publicKey,
-          (updatedAccountInfo) => {
-            setBalance(updatedAccountInfo.lamports);
-          },
-          "confirmed"
-        );
-
-        const accountInfo = await connection.getAccountInfo(publicKey);
-
-        if (accountInfo) {
-          setBalance(accountInfo.lamports);
-        } else {
-          throw new Error("Account info not found");
-        }
-      } catch (error) {
-        console.error("Failed to retrieve account info:", error);
-      }
-    };
-
-    updateBalance();
-  }, [connection, publicKey]);
-
-  // const { publicKey } = useWallet()
-  // const balanceQuery = useGetBalance({ address: publicKey! })
-
-  // useEffect(() => {
-  //   if (!publicKey) return
-
-  //   console.log('balanceQuery', balanceQuery.data)
-  // }, [balanceQuery, publicKey])
 
   function contactListHandle() {
     setIsOpen((prev) => !prev);
