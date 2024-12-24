@@ -5,9 +5,11 @@ import Image from "next/image";
 import { useMessages } from "@/contexts/store";
 import { UseLangchainAiResponse } from "@/api/langchain";
 import useTokenSwap from "./swap";
+import { useGetBalance } from "@/hook/useGetBalance";
 export const Chatinputdiv = () => {
   const { setMessages, setIsLoading, setTransactionType, transactionType } =
     useMessages();
+  const { balance } = useGetBalance();
   const [input, setInput] = useState("");
   const { handleSwap } = useTokenSwap(); // , txResult, error, loading
   const [inputAmount, setInputAmount] = useState("");
@@ -18,17 +20,31 @@ export const Chatinputdiv = () => {
     const airesponse = await UseLangchainAiResponse(input);
     console.log(airesponse);
     // Then add AI's response to messages
-    if (airesponse?.generalResponse) {
+    if (airesponse.intent == "checkBalance"){
       setMessages((prevMessages) => [
         ...prevMessages,
         {
           id: (prevMessages.length + 1).toString(),
           sender: "agent",
-          content: airesponse.generalResponse,
+          content: balance.toString(),
+          balance:true,
         },
       ]);
       setIsLoading(false);
+      console.log("Transfer intent detected");
+      return
     }
+      if (airesponse?.generalResponse) {
+        // setMessages((prevMessages) => [
+        //   ...prevMessages,
+        //   {
+        //     id: (prevMessages.length + 1).toString(),
+        //     sender: "agent",
+        //     content: airesponse.generalResponse,
+        //   },
+        // ]);
+        // setIsLoading(false);
+      }
 
     switch (airesponse.intent) {
       case "swap":
@@ -55,6 +71,16 @@ export const Chatinputdiv = () => {
         console.log("Check balance intent detected");
         break;
       case "transfer":
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            id: (prevMessages.length + 1).toString(),
+            sender: "agent",
+            content: balance.toString(),
+            balance: true,
+          },
+        ]);
+        setIsLoading(false);
         console.log("Transfer intent detected");
         break;
       case "normalChat":
@@ -79,6 +105,7 @@ export const Chatinputdiv = () => {
           id: (prevMessages.length + 1).toString(),
           sender: "user",
           content: transactionType,
+          balance: false,
         },
       ]);
       aiResponse(transactionType);
@@ -99,6 +126,7 @@ export const Chatinputdiv = () => {
         id: (prevMessages.length + 1).toString(),
         sender: "user",
         content: input,
+        balance:false,
       },
     ]);
     setInput("");

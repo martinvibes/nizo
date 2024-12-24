@@ -16,8 +16,6 @@ export async function UseLangchainAiResponse(question: string) {
     model: "gpt-4o-mini",
     temperature: 0,
     apiKey: process.env.NEXT_PUBLIC_LANGCHAIN_API_KEY,
-    // apiKey:
-    //   "",
   });
 
   const formatInstructions = `Analyze the user's input and categorize it:
