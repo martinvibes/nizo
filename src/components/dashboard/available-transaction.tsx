@@ -6,8 +6,10 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useMessages } from "@/contexts/store";
 import toast from "react-hot-toast";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 function AvailabeFeatures() {
+  const { publicKey } = useWallet();
   const { setTransactionType } = useMessages();
   const cardRef = useRef<HTMLDivElement>(null);
   // const swapRef = useRef(null);
@@ -35,6 +37,10 @@ function AvailabeFeatures() {
   });
 
   function transactionHandler(data: string) {
+    if (!publicKey) {
+      toast.error("Wallet not connected");
+      return;
+    }
     if(data.includes("transaction")){
       toast.error("transaction features coming soon")
       return

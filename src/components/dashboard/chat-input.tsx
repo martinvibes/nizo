@@ -7,15 +7,29 @@ import { UseLangchainAiResponse } from "@/api/langchain";
 import { useJupiterSwap } from "@/api/jupiter-swap-example";
 import { useGetBalance } from "@/hook/useGetBalance";
 import toast from "react-hot-toast";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export const Chatinputdiv = () => {
+   const { publicKey } = useWallet();
   const { setMessages, setIsLoading, setTransactionType, transactionType } =
     useMessages();
   const { balance } = useGetBalance();
   const { swap } = useJupiterSwap();
   const [input, setInput] = useState("");
-
   async function aiResponse(input: string) {
+     if (!publicKey) {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          id: (prevMessages.length + 1).toString(),
+          sender: "agent",
+          content: "connect your wallet to continue",
+          // balance: true,
+        },
+      ]);
+      setIsLoading(false);
+       return;
+     }
     const airesponse = await UseLangchainAiResponse(input);
     setIsLoading(true);
     // Then add AI's response to messages
