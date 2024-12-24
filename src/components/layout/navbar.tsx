@@ -19,7 +19,7 @@ import { Button } from "../ui/button";
 import { ChevronDown } from "lucide-react";
 import ContactIcon from "../icons/contacts-icon";
 import ContactList from "../contact-list/contact-list";
-import logo from "../../../public/svg nizo logo.svg"
+import logo from "../../../public/svg nizo logo.svg";
 
 const NavBar = () => {
   const { setVisible } = useWalletModal();
@@ -48,7 +48,12 @@ const NavBar = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4 md:gap-8">
               <Link href={"/"}>
-                <Image src={logo} alt="nizo" priority className="w-[55px] h-10" />
+                <Image
+                  src={logo}
+                  alt="nizo"
+                  priority
+                  className="w-[55px] h-10"
+                />
               </Link>
             </div>
             <div>
@@ -61,7 +66,7 @@ const NavBar = () => {
 
             <div className="flex items-center gap-2">
               {connected ? <ContactIcon close={contactListHandle} /> : ""}
-              
+
               {/* <WalletMultiButton /> */}
               {!connected && (
                 <button
@@ -92,7 +97,7 @@ const NavBar = () => {
                   <DropdownMenuTrigger asChild>
                     <Button className="bg-gradient-to-r from-[#4A90E2] to-[#B6689E] hover:bg-[#B073FF] hover:bg-opacity-50 rounded-full text-white font-bold text-[16px] py-6 px-5">
                       <Image
-                        src={wallet?.adapter.icon || ""}
+                        src={wallet?.adapter.icon as string}
                         height={24}
                         width={24}
                         alt="wallet icon"
