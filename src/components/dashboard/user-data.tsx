@@ -38,11 +38,9 @@ function UserData() {
       <AvatarDemo />
       <div className="grid gap-2">
         <Button className="bg-[#13151D] border border-[#3D435C] text-[#51586D] text-base font-semibold btn">
-          Lorem
+          Ciao
         </Button>
-        <Button className="bg-[#13151D] border-[#3D435C] text-[#51586D] text-base font-semibold border btn">
-          Lorem
-        </Button>
+
       </div>
     </div>
   );

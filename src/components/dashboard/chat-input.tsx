@@ -6,58 +6,44 @@ import { useMessages } from "@/contexts/store";
 import { UseLangchainAiResponse } from "@/api/langchain";
 import { useJupiterSwap } from "@/api/jupiter-swap-example";
 import { useGetBalance } from "@/hook/useGetBalance";
-export const Chatinputdiv = () => {
-  const [input, setInput] = useState("");
-  const { swap } = useJupiterSwap();
-  const { setMessages } = useMessages();
-  // const handleInputSubmit = async () => {
-  //   if (input.trim() === "") return;
-  //   setMessages((prevMessages) => [
-  //     ...prevMessages,
-  //     {
-  //       id: (prevMessages.length + 1).toString(),
-  //       sender: "user",
-  //       content: input,
-  //     },
-  //   ]);
-    setInput("");
 
 export const Chatinputdiv = () => {
   const { setMessages, setIsLoading, setTransactionType, transactionType } =
     useMessages();
   const { balance } = useGetBalance();
+  const { swap } = useJupiterSwap();
   const [input, setInput] = useState("");
-
 
   async function aiResponse(input: string) {
     const airesponse = await UseLangchainAiResponse(input);
     console.log(airesponse);
     // Then add AI's response to messages
-    if (airesponse.intent == "checkBalance"){
+    if (airesponse.intent == "checkBalance") {
       setMessages((prevMessages) => [
         ...prevMessages,
         {
           id: (prevMessages.length + 1).toString(),
           sender: "agent",
           content: balance.toString(),
-          balance:true,
+          balance: true,
         },
       ]);
       setIsLoading(false);
       console.log("Transfer intent detected");
-      return
+      return;
     }
-      if (airesponse?.generalResponse) {
-        // setMessages((prevMessages) => [
-        //   ...prevMessages,
-        //   {
-        //     id: (prevMessages.length + 1).toString(),
-        //     sender: "agent",
-        //     content: airesponse.generalResponse,
-        //   },
-        // ]);
-        // setIsLoading(false);
-      }
+    if (airesponse?.generalResponse) {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          id: (prevMessages.length + 1).toString(),
+          sender: "agent",
+          content: airesponse.generalResponse,
+          balance: false,
+        },
+      ]);
+      setIsLoading(false);
+    }
 
     switch (airesponse.intent) {
       case "swap":
@@ -69,7 +55,7 @@ export const Chatinputdiv = () => {
           try {
             // Swap 1 SOL for USDC
             const txid = await swap({
-              inputAmount: (airesponse.amount ?? 1) * 1_000_000_000, // 1 SOL (in lamports)
+              inputAmount: (airesponse.amount ?? 0.0001) * 1_000_000_000, // 1 SOL (in lamports)
               inputMint: "So11111111111111111111111111111111111111112",
               outputMint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
               slippageBps: 50, // 0.5% slippage
@@ -78,7 +64,6 @@ export const Chatinputdiv = () => {
           } catch (err) {
             console.error("Swap failed:", err);
           }
-
         }
         break;
       case "checkBalance":
@@ -140,7 +125,7 @@ export const Chatinputdiv = () => {
         id: (prevMessages.length + 1).toString(),
         sender: "user",
         content: input,
-        balance:false,
+        balance: false,
       },
     ]);
     setInput("");
