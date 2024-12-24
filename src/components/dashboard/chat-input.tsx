@@ -6,32 +6,47 @@ import { useMessages } from "@/contexts/store";
 import { UseLangchainAiResponse } from "@/api/langchain";
 import { useJupiterSwap } from "@/api/jupiter-swap-example";
 import { useGetBalance } from "@/hook/useGetBalance";
+import toast from "react-hot-toast";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export const Chatinputdiv = () => {
+   const { publicKey } = useWallet();
   const { setMessages, setIsLoading, setTransactionType, transactionType } =
     useMessages();
   const { balance } = useGetBalance();
   const { swap } = useJupiterSwap();
   const [input, setInput] = useState("");
-
   async function aiResponse(input: string) {
-    const airesponse = await UseLangchainAiResponse(input);
-    console.log(airesponse);
-    // Then add AI's response to messages
-    if (airesponse.intent == "checkBalance") {
+     if (!publicKey) {
       setMessages((prevMessages) => [
         ...prevMessages,
         {
           id: (prevMessages.length + 1).toString(),
           sender: "agent",
-          content: balance.toString(),
-          balance: true,
+          content: "connect your wallet to continue",
+          // balance: true,
         },
       ]);
       setIsLoading(false);
-      console.log("Transfer intent detected");
-      return;
-    }
+       return;
+     }
+    const airesponse = await UseLangchainAiResponse(input);
+    setIsLoading(true);
+    // Then add AI's response to messages
+      if (airesponse.intent == "checkBalance") {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            id: (prevMessages.length + 1).toString(),
+            sender: "chart",
+            content: balance,
+            // balance: true,
+          },
+        ]);
+        setIsLoading(false);
+        toast.success("successfully check your balance");
+        return;
+      }
     if (airesponse?.generalResponse) {
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -61,6 +76,7 @@ export const Chatinputdiv = () => {
               slippageBps: 50, // 0.5% slippage
             });
             console.log("Swap successful! Transaction ID:", txid);
+            toast.success("Swap successful!");
           } catch (err) {
             console.error("Swap failed:", err);
           }
@@ -133,7 +149,6 @@ export const Chatinputdiv = () => {
           id: (prevMessages.length + 1).toString(),
           sender: "user",
           content: transactionType,
-          balance: false,
         },
       ]);
       aiResponse(transactionType);

@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "@/contexts/Providers";
 import Footer from "@/components/layout/footer";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "NIZO",
@@ -24,6 +25,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Toaster
+            position="top-center"
+            reverseOrder={false}
+            gutter={8}
+            containerClassName=""
+          />
           <Providers> {children}</Providers>
           <Footer />
         </ThemeProvider>

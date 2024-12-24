@@ -13,6 +13,7 @@ import {
   SWITCHBOARD_PROGRAM_ID,
 } from "@/config/switchboard-feeds";
 import { SwitchboardFeed } from "@/config/types/switchboard";
+import toast from "react-hot-toast";
 
 interface PriceData {
   [key: string]: {
@@ -201,9 +202,15 @@ const SwitchboardPriceFeed = () => {
                   {prices[feed.symbol]?.lastUpdated || "Never"}
                 </div>
                 <button
-                  onClick={() => updateFeed(feed)}
+                  onClick={() =>{
+                    if(!publicKey){
+                      toast.error("connect your wallet to continue");
+                      return
+                    }
+                    updateFeed(feed)}
+                  }
                   className="px-4 py-1.5 bg-purple-600 text-white text-sm rounded hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={!publicKey || prices[feed.symbol]?.loading}
+                  disabled={prices[feed.symbol]?.loading}
                 >
                   Update Price
                 </button>

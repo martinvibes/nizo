@@ -26,9 +26,9 @@ export const Chatpage = () => {
               message.sender === "user" ? "bg-[#B6689E]" : "bg-[#645BE2]"
             } px-4 py-3 rounded-[24px] max-w-[70%]`}
           >
-            {!message.balance && message.content}
-            {message.balance && (
-              <DonutChart data={[{ name: "sol", value: 0.001 }]} total={1.5} />
+            {message.sender !== "chart" && message.content}
+            {message.sender === "chart" && (
+              <DonutChart data={[{ name: "sol", value: message.content }]} />
             )}
             {message.sender === 'chart' && message.content.includes('amount') && (
               <SendTransactionForm 

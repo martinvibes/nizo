@@ -59,15 +59,15 @@ AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 function AvatarDemo() {
   const array = [img6, img7, img8, img9];
 
-  const randomNumber = Math.floor(Math.random() * 8) + 1;
+  const randomNumber = Math.floor(Math.random() * array.length);
   console.log(randomNumber);
   return (
     <Avatar className="w-[200px] h-[200px] mx-auto">
       {/* <AvatarImage src="../../../public/photo.png" alt="Colm Tuite" /> */}
-      <Image src={array[randomNumber]} alt="avatar" />
-      <AvatarFallback className="AvatarFallback" delayMs={600}>
-        CT
-      </AvatarFallback>
+      <Image src={array[randomNumber]} priority alt="avatar" />
+      {/* <AvatarFallback className="AvatarFallback" delayMs={600}>
+        user
+      </AvatarFallback> */}
     </Avatar>
   );
 }
