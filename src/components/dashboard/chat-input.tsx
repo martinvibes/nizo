@@ -70,17 +70,46 @@ export const Chatinputdiv = () => {
         console.log("Check balance intent detected");
         break;
       case "transfer":
+        // Extract amount and address from the message if provided
+        const transferMatch = input.match(/transfer\s+(\d+\.?\d*)\s+SOL\s+to\s+([^\s]+)/i);
+        if (transferMatch) {
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              id: (prevMessages.length + 2).toString(),
+              sender: "chart",
+              content: JSON.stringify({
+                amount: parseFloat(transferMatch[1]),
+                address: transferMatch[2],
+                currency: "SOL"
+              }),
+              balance: false,
+            }
+          ]);
+        } else {
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              id: (prevMessages.length + 1).toString(),
+              sender: "agent",
+              content: "Please provide amount and address (e.g., 'transfer 1 SOL to address')",
+              balance: false,
+            }
+          ]);
+        }
+        setIsLoading(false);
+        break;
+      case "error":
         setMessages((prevMessages) => [
           ...prevMessages,
           {
             id: (prevMessages.length + 1).toString(),
             sender: "agent",
-            content: `Hey there, your balance is  ${balance.toString()} `,
-            balance: true,
-          },
+            content: `Transaction failed: ${airesponse.error}. Please try again or check your wallet balance.`,
+            balance: false,
+          }
         ]);
         setIsLoading(false);
-        console.log("Transfer intent detected");
         break;
       case "normalChat":
         console.log("Normal chat intent detected");
