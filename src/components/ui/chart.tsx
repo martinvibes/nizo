@@ -16,7 +16,7 @@ interface DonutChartProps {
 const DonutChart: React.FC<DonutChartProps> = ({ data, total }) => {
   return (
     <div
-      className="w-[80%] min-[658px]:w-full min-[773px]:w-full md:w-[60%] lg:w-1/2 bg-[#1A1C24]"
+      className="w-full bg-[#645BE2]"
       style={{
         textAlign: "center",
         color: "#fff",
@@ -61,7 +61,7 @@ const DonutChart: React.FC<DonutChartProps> = ({ data, total }) => {
         >
           {data.map((entry, index) => (
             <li
-            className="flex items-center gap-1 font-normal text-base"
+              className="flex items-center gap-1 font-normal text-base"
               key={entry.name}
               style={{
                 fontSize: "0.9rem",
