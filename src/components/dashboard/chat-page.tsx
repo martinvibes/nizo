@@ -8,7 +8,7 @@ import DonutChart from "../ui/chart";
 const poppins = Poppins({ weight: ["400"], subsets: ["latin"] });
 
 export const Chatpage = () => {
-  const { messages, isLoading} = useMessages();
+  const { messages, isLoading } = useMessages();
   return (
     <div
       className={`${poppins.className} text chat-texts h-[720px] w-full mx-auto p-4 rounded-lg space-y-4 flex flex-col-reverse overflow-y-auto scrollbar-hide scroll-smooth relative`}
@@ -27,7 +27,7 @@ export const Chatpage = () => {
           >
             {message.sender !== "chart" && message.content}
             {message.sender === "chart" && (
-              <DonutChart data={[{ name: "sol", value:message.content }]} />
+              <DonutChart data={[{ name: "sol", value: message.content }]} />
             )}
           </div>
         </div>
