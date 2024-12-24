@@ -5,6 +5,7 @@ import { Card } from "../ui/card";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useMessages } from "@/contexts/store";
+import toast from "react-hot-toast";
 
 function AvailabeFeatures() {
   const { setTransactionType } = useMessages();
@@ -34,6 +35,10 @@ function AvailabeFeatures() {
   });
 
   function transactionHandler(data: string) {
+    if(data.includes("transaction")){
+      toast.error("transaction features coming soon")
+      return
+    }
     setTransactionType(data);
   }
 
