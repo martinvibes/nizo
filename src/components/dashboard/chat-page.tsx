@@ -23,7 +23,7 @@ export const Chatpage = () => {
             <div
             className={`${
               message.sender === "user" ? "bg-[#B6689E]" : "bg-[#645BE2]"
-            } px-4 py-3 rounded-[24px] break-words overflow-wrap-anywhere max-w-[700px] lg:max-w-[700px] md:max-w-[500px] sm:max-w-[300px]`}
+            } px-4 py-3 rounded-[24px] break-words overflow-wrap-anywhere lg:max-w-[700px] md:max-w-[500px] max-w-[300px]`}
             >
             {message.sender !== "chart" && message.content}
             {message.sender === "chart" && (
