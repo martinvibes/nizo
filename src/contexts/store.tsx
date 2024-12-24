@@ -2,10 +2,16 @@
 
 import React, { createContext, useContext, useState } from 'react';
 
+type balance = {
+  sol: number;
+  usd: number;
+};
+
 interface Message {
     id: string;
-    content: string | number | null;
+    content: string;
     sender: 'user' | 'agent' | 'chart';
+    balance:balance
 }
 
 type MessageContextType = {

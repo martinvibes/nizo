@@ -10,43 +10,53 @@ import toast from "react-hot-toast";
 import { useWallet } from "@solana/wallet-adapter-react";
 
 export const Chatinputdiv = () => {
-   const { publicKey } = useWallet();
+  const { publicKey } = useWallet();
   const { setMessages, setIsLoading, setTransactionType, transactionType } =
     useMessages();
   const { balance } = useGetBalance();
   const { swap } = useJupiterSwap();
   const [input, setInput] = useState("");
   async function aiResponse(input: string) {
-     if (!publicKey) {
+    if (!publicKey) {
       setMessages((prevMessages) => [
         ...prevMessages,
         {
           id: (prevMessages.length + 1).toString(),
           sender: "agent",
-          content: "connect your wallet to continue",
-          // balance: true,
+          content: `
+          To interact with Nizo AI and unlock personalized features, please connect your Solana wallet.
+          By connecting your wallet, you can:
+          Securely verify your identity.
+          Access AI-powered tools and resources tailored to your account.
+          Seamlessly manage your on-chain interactions.
+          Your wallet connection is safe and secure—Nizo AI will never store your private keys or compromise your assets.
+          Click the "Connect Wallet" button to get started!`,
+          balance: {
+            sol: 0,
+            usd: 0,
+          },
         },
       ]);
       setIsLoading(false);
-       return;
-     }
+      return;
+    }
     const airesponse = await UseLangchainAiResponse(input);
     setIsLoading(true);
     // Then add AI's response to messages
-      if (airesponse.intent == "checkBalance") {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          {
-            id: (prevMessages.length + 1).toString(),
-            sender: "chart",
-            content: balance,
-            // balance: true,
-          },
-        ]);
-        setIsLoading(false);
-        toast.success("successfully check your balance");
-        return;
-      }
+    if (airesponse.intent == "checkBalance") {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          id: (prevMessages.length + 1).toString(),
+          sender: "chart",
+          content: "",
+          balance: balance,
+        },
+      ]);
+      setIsLoading(false);
+      toast.success("successfully check your balance");
+      return;
+    }
     if (airesponse?.generalResponse) {
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -54,7 +64,10 @@ export const Chatinputdiv = () => {
           id: (prevMessages.length + 1).toString(),
           sender: "agent",
           content: airesponse.generalResponse,
-          balance: false,
+          balance: {
+            sol: 0,
+            usd: 0,
+          },
         },
       ]);
       setIsLoading(false);
@@ -92,7 +105,10 @@ export const Chatinputdiv = () => {
             id: (prevMessages.length + 1).toString(),
             sender: "agent",
             content: `Hey there, your balance is  ${balance} `,
-            balance: true,
+            balance: {
+              sol: 0,
+              usd: 0,
+            },
           },
         ]);
         setIsLoading(false);
@@ -120,6 +136,10 @@ export const Chatinputdiv = () => {
           id: (prevMessages.length + 1).toString(),
           sender: "user",
           content: transactionType,
+          balance: {
+            sol: 0,
+            usd: 0,
+          },
         },
       ]);
       aiResponse(transactionType);
@@ -140,7 +160,10 @@ export const Chatinputdiv = () => {
         id: (prevMessages.length + 1).toString(),
         sender: "user",
         content: input,
-        balance: false,
+        balance: {
+          sol: 0,
+          usd: 0,
+        },
       },
     ]);
     setInput("");

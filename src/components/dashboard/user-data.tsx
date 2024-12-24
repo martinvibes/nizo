@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 //import {motion} from "motion/react"
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import toast from "react-hot-toast";
 
 function UserData() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -37,7 +38,9 @@ function UserData() {
     >
       <AvatarDemo />
       <div className="grid gap-2">
-        <Button className="bg-[#13151D] border border-[#3D435C] text-[#51586D] text-base font-semibold btn">
+        <Button className="bg-[#13151D] border border-[#3D435C] text-[#51586D] text-base font-semibold btn" onClick={()=>{
+           toast.error("feature in development try other NIZO features");
+        }}>
           Ciao
         </Button>
 
