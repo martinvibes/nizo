@@ -19,7 +19,6 @@ import { Button } from "../ui/button";
 import { ChevronDown } from "lucide-react";
 import ContactIcon from "../icons/contacts-icon";
 import ContactList from "../contact-list/contact-list";
-import { useGetBalance } from "@/hook/useGetBalance";
 
 const NavBar = () => {
   const { setVisible } = useWalletModal();
@@ -27,7 +26,6 @@ const NavBar = () => {
   // const { connection } = useConnection();
    // console.log(connection);
   const [slicedPublicKey, setSlicedPublicKey] = useState("");
-  const {balance} = useGetBalance()
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -57,10 +55,7 @@ const NavBar = () => {
             </div>
             <div className="flex items-center gap-2">
               {connected ? <ContactIcon close={contactListHandle} /> : ""}
-
-              <h2 className="mr-2">
-                {connected ? " Balance: " + balance + " SOL" : ""}
-              </h2>
+              
               {/* <WalletMultiButton /> */}
               {!connected && (
                 <button
