@@ -9,7 +9,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
 } from "@radix-ui/react-dropdown-menu";
-import { useWallet, useConnection } from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { CopyIcon, Wallet, LogOut } from "lucide-react";
 import Image from "next/image";
@@ -19,13 +19,15 @@ import { Button } from "../ui/button";
 import { ChevronDown } from "lucide-react";
 import ContactIcon from "../icons/contacts-icon";
 import ContactList from "../contact-list/contact-list";
+import { useGetBalance } from "@/hook/useGetBalance";
 
 const NavBar = () => {
   const { setVisible } = useWalletModal();
   const { connected, disconnect, publicKey, wallet } = useWallet();
-  const { connection } = useConnection();
+  // const { connection } = useConnection();
+  // console.log(connection);
   const [slicedPublicKey, setSlicedPublicKey] = useState("");
-  const [balance, setBalance] = useState(0);
+  const { balance } = useGetBalance();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -34,47 +36,6 @@ const NavBar = () => {
     const base58 = publicKey.toBase58();
     setSlicedPublicKey(base58.slice(0, 4) + ".." + base58.slice(-4));
   }, [publicKey]);
-
-  useEffect(() => {
-    const updateBalance = async () => {
-      try {
-        if (!connection || !publicKey) {
-          return console.error(
-            "Wallet not connected or connection unavailable"
-          );
-        }
-
-        connection.onAccountChange(
-          publicKey,
-          (updatedAccountInfo) => {
-            setBalance(updatedAccountInfo.lamports);
-          },
-          "confirmed"
-        );
-
-        const accountInfo = await connection.getAccountInfo(publicKey);
-
-        if (accountInfo) {
-          setBalance(accountInfo.lamports);
-        } else {
-          throw new Error("Account info not found");
-        }
-      } catch (error) {
-        console.error("Failed to retrieve account info:", error);
-      }
-    };
-
-    updateBalance();
-  }, [connection, publicKey]);
-
-  // const { publicKey } = useWallet()
-  // const balanceQuery = useGetBalance({ address: publicKey! })
-
-  // useEffect(() => {
-  //   if (!publicKey) return
-
-  //   console.log('balanceQuery', balanceQuery.data)
-  // }, [balanceQuery, publicKey])
 
   function contactListHandle() {
     setIsOpen((prev) => !prev);
@@ -93,6 +54,15 @@ const NavBar = () => {
                 </h1>
               </Link>
             </div>
+
+            <div>
+              <Link href={"/price-feeds"}>
+                <h2 className="text-base md:text-lg font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
+                  Price feeds
+                </h2>
+              </Link>
+            </div>
+
             <div className="flex items-center gap-2">
               {connected ? <ContactIcon close={contactListHandle} /> : ""}
 
@@ -138,7 +108,7 @@ const NavBar = () => {
                       <ChevronDown className="h-[16px] w-[16px]" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-48 bg-[#18191B] rounded-lg border mt-2 border-neutral-800">
+                  <DropdownMenuContent className="w-48 z-30 bg-[#18191B] rounded-lg border mt-2 border-neutral-800">
                     <DropdownMenuLabel className="text-sm text-neutral-500 px-3 py-2">
                       My Account
                     </DropdownMenuLabel>

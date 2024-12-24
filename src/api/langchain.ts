@@ -19,7 +19,7 @@ export async function UseLangchainAiResponse(question: string) {
   });
 
   const formatInstructions = `Analyze the user's input and categorize it:
-      - If it's a DeFi action (swap, check balance), extract specific parameters
+      - If it's a DeFi action (swap, transfer, check balance), extract specific parameters
       - For general questions about the platform, use the provided website context
       - Handle various types of inputs flexibly
       - Provide clear, enguaging concise, and helpful responses`;
@@ -68,7 +68,7 @@ export async function UseLangchainAiResponse(question: string) {
       destinationToken: intentResult.destinationToken,
       error: intentResult.error,
       generalResponse: intentResult.generalResponse,
-    }
+    };
   } catch (error) {
     console.error("Error processing request:", error);
     return {
