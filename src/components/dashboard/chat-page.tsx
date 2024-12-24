@@ -20,16 +20,16 @@ export const Chatpage = () => {
             message.sender === "user" ? "justify-end" : ""
           }`}
         >
-          <div
+            <div
             className={`${
               message.sender === "user" ? "bg-[#B6689E]" : "bg-[#645BE2]"
-            } px-4 py-3 rounded-[24px] max-w-[70%]`}
-          >
+            } px-4 py-3 rounded-[24px] break-words overflow-wrap-anywhere lg:max-w-[700px] md:max-w-[500px] max-w-[300px]`}
+            >
             {message.sender !== "chart" && message.content}
             {message.sender === "chart" && (
               <DonutChart data={[{ name: "sol", value: message.content }]} />
             )}
-          </div>
+            </div>
         </div>
       ))}
 
