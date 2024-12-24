@@ -6,6 +6,7 @@ import { useMessages } from "@/contexts/store";
 import { UseLangchainAiResponse } from "@/api/langchain";
 import { useJupiterSwap } from "@/api/jupiter-swap-example";
 import { useGetBalance } from "@/hook/useGetBalance";
+import toast from "react-hot-toast";
 
 export const Chatinputdiv = () => {
   const { setMessages, setIsLoading, setTransactionType, transactionType } =
@@ -18,19 +19,20 @@ export const Chatinputdiv = () => {
     const airesponse = await UseLangchainAiResponse(input);
     setIsLoading(true);
     // Then add AI's response to messages
-    if (airesponse.intent == "checkBalance") {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          id: (prevMessages.length + 1).toString(),
-          sender: "chart",
-          content: balance,
-          // balance: true,
-        },
-      ]);
-      setIsLoading(false);
-      return;
-    }
+      if (airesponse.intent == "checkBalance") {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            id: (prevMessages.length + 1).toString(),
+            sender: "chart",
+            content: balance,
+            // balance: true,
+          },
+        ]);
+        setIsLoading(false);
+        toast.success("successfully check your balance");
+        return;
+      }
     if (airesponse?.generalResponse) {
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -60,6 +62,7 @@ export const Chatinputdiv = () => {
               slippageBps: 50, // 0.5% slippage
             });
             console.log("Swap successful! Transaction ID:", txid);
+            toast.success("Swap successful!");
           } catch (err) {
             console.error("Swap failed:", err);
           }

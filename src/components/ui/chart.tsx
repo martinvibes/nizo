@@ -61,7 +61,7 @@ const DonutChart: React.FC<DonutChartProps> = ({ data }) => {
         >
           {data.map((entry, index) => (
             <li
-              className="flex items-center gap-1 font-normal text-base"
+              className="flex items-center gap-1 font-normal text-2xl"
               key={entry.name}
               style={{
                 fontSize: "0.9rem",
