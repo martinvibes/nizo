@@ -14,7 +14,6 @@ import img9 from "../../../public/e718b71961850ab945d39a3d2f2d72d6.jpg";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
-
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>
@@ -58,14 +57,14 @@ const AvatarFallback = React.forwardRef<
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 
 function AvatarDemo() {
-  const array = [img6,img7,img8,img9];
+  const array = [img6, img7, img8, img9];
 
   const randomNumber = Math.floor(Math.random() * 8) + 1;
   console.log(randomNumber);
   return (
     <Avatar className="w-[200px] h-[200px] mx-auto">
       {/* <AvatarImage src="../../../public/photo.png" alt="Colm Tuite" /> */}
-      <Image src={array[randomNumber]} alt="avatar"  />
+      <Image src={array[randomNumber]} alt="avatar" />
       <AvatarFallback className="AvatarFallback" delayMs={600}>
         CT
       </AvatarFallback>

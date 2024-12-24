@@ -166,7 +166,14 @@ const SwitchboardPriceFeed = () => {
   }
 
   return (
-    <div className="max-w-[68rem] mx-auto space-y-4 p-4">
+    <div className="max-w-[68rem] mx-auto border rounded-lg space-y-4 p-4 my-4">
+      <div className="text-[27px] text-purple-200">On-Demand Feeds</div>
+
+      <div className="flex border rounded-lg text-purple-500 font-bold px-4 py-3 justify-between items-center">
+        <h1>FEEDS</h1>
+        <span>VALUE</span>
+      </div>
+
       {PRICE_FEEDS.map((feed) => (
         <Card key={feed.address} className="bg-[#18191B]">
           <CardContent className="p-4">

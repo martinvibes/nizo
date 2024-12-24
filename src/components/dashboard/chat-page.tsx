@@ -27,7 +27,7 @@ export const Chatpage = () => {
           >
             {!message.balance && message.content}
             {message.balance && (
-              <DonutChart data={[{ name: "sol", value: 66 }]} total={1} />
+              <DonutChart data={[{ name: "sol", value: 0.001 }]} total={1.5} />
             )}
           </div>
         </div>
