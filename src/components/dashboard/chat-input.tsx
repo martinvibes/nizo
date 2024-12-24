@@ -10,43 +10,45 @@ import toast from "react-hot-toast";
 import { useWallet } from "@solana/wallet-adapter-react";
 
 export const Chatinputdiv = () => {
-   const { publicKey } = useWallet();
+  const { publicKey } = useWallet();
   const { setMessages, setIsLoading, setTransactionType, transactionType } =
     useMessages();
   const { balance } = useGetBalance();
   const { swap } = useJupiterSwap();
   const [input, setInput] = useState("");
-  async function aiResponse(input: string) {
-     if (!publicKey) {
+
+  const handleAiResponse = async (inputText: string) => {
+    if (!publicKey) {
       setMessages((prevMessages) => [
         ...prevMessages,
         {
           id: (prevMessages.length + 1).toString(),
           sender: "agent",
-          content: "connect your wallet to continue",
-          // balance: true,
+          content: `Please connect your wallet first...`,
+          balance: { sol: 0, usd: 0 },
         },
       ]);
       setIsLoading(false);
-       return;
-     }
-    const airesponse = await UseLangchainAiResponse(input);
+      return;
+    }
+
+    const airesponse = await UseLangchainAiResponse(inputText);
     setIsLoading(true);
-    // Then add AI's response to messages
-      if (airesponse.intent == "checkBalance") {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          {
-            id: (prevMessages.length + 1).toString(),
-            sender: "chart",
-            content: balance,
-            // balance: true,
-          },
-        ]);
-        setIsLoading(false);
-        toast.success("successfully check your balance");
-        return;
-      }
+
+    if (airesponse.intent == "checkBalance") {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          id: (prevMessages.length + 1).toString(),
+          sender: "chart",
+          content: "",
+          balance: balance,
+        },
+      ]);
+      setIsLoading(false);
+      toast.success("successfully check your balance");
+      return;
+    }
     if (airesponse?.generalResponse) {
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -54,7 +56,10 @@ export const Chatinputdiv = () => {
           id: (prevMessages.length + 1).toString(),
           sender: "agent",
           content: airesponse.generalResponse,
-          balance: false,
+          balance: {
+            sol: 0,
+            usd: 0,
+          },
         },
       ]);
       setIsLoading(false);
@@ -99,7 +104,7 @@ export const Chatinputdiv = () => {
                 address: transferMatch[2],
                 currency: "SOL"
               }),
-              balance: false,
+              balance: { sol: 0, usd: 0 }
             }
           ]);
         } else {
@@ -109,7 +114,7 @@ export const Chatinputdiv = () => {
               id: (prevMessages.length + 1).toString(),
               sender: "agent",
               content: "Please provide amount and address (e.g., 'transfer 1 SOL to address')",
-              balance: false,
+              balance: { sol: 0, usd: 0 }
             }
           ]);
         }
@@ -122,7 +127,7 @@ export const Chatinputdiv = () => {
             id: (prevMessages.length + 1).toString(),
             sender: "agent",
             content: `Transaction failed: ${airesponse.error}. Please try again or check your wallet balance.`,
-            balance: false,
+            balance: { sol: 0, usd: 0 }
           }
         ]);
         setIsLoading(false);
@@ -138,7 +143,7 @@ export const Chatinputdiv = () => {
         console.log("Unknown intent");
         break;
     }
-  }
+  };
 
   useEffect(() => {
     if (transactionType !== "") {
@@ -149,16 +154,16 @@ export const Chatinputdiv = () => {
           id: (prevMessages.length + 1).toString(),
           sender: "user",
           content: transactionType,
-        },
+          balance: { sol: 0, usd: 0 }
+        }
       ]);
-      aiResponse(transactionType);
+      handleAiResponse(transactionType);
     }
     return () => {
       setTransactionType("");
       setIsLoading(false);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transactionType, setTransactionType, setIsLoading, setMessages]);
+  }, [transactionType, setTransactionType, setIsLoading, setMessages, handleAiResponse]);
 
   const handleInputSubmit = async () => {
     if (input.trim() === "") return;
@@ -169,12 +174,15 @@ export const Chatinputdiv = () => {
         id: (prevMessages.length + 1).toString(),
         sender: "user",
         content: input,
-        balance: false,
+        balance: {
+          sol: 0,
+          usd: 0,
+        },
       },
     ]);
     setInput("");
 
-    await aiResponse(input);
+    await handleAiResponse(input);
   };
 
   const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>): void => {

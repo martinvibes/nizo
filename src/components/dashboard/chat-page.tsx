@@ -24,11 +24,14 @@ export const Chatpage = () => {
           <div
             className={`${
               message.sender === "user" ? "bg-[#B6689E]" : "bg-[#645BE2]"
-            } px-4 py-3 rounded-[24px] max-w-[70%]`}
+            } px-4 py-3 rounded-[24px] break-words overflow-wrap-anywhere lg:max-w-[700px] md:max-w-[500px] max-w-[300px]`}
           >
             {message.sender !== "chart" && message.content}
             {message.sender === "chart" && (
-              <DonutChart data={[{ name: "sol", value: message.content }]} />
+              <DonutChart
+                data={[{ name: "sol", value: message.balance.sol }]}
+                total={message.balance.usd}
+              />
             )}
             {message.sender === 'chart' && message.content.includes('amount') && (
               <SendTransactionForm 
@@ -38,7 +41,7 @@ export const Chatpage = () => {
                     id: (prev.length + 1).toString(),
                     sender: 'agent',
                     content: 'Transfer completed successfully!',
-                    balance: false
+                    balance: { sol: 0, usd: 0 }
                   }]);
                 }}
               />

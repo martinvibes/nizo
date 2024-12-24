@@ -41,9 +41,9 @@ function AvailabeFeatures() {
       toast.error("Wallet not connected");
       return;
     }
-    if(data.includes("transaction")){
-      toast.error("transaction features coming soon")
-      return
+    if (data.includes("transaction") || data.includes("transfer")) {
+      toast.error("feature in development try other NIZO features");
+      return;
     }
     setTransactionType(data);
   }
@@ -68,6 +68,12 @@ function AvailabeFeatures() {
           className="bg-[#13151D] border-[#3D435C] text-[#51586D] text-base font-semibold border btn"
         >
           Check balance
+        </Button>
+        <Button
+          onClick={() => transactionHandler("transfer")}
+          className="bg-[#13151D] border-[#3D435C] text-[#51586D] text-base font-semibold border btn"
+        >
+          transfer
         </Button>
         <Button
           onClick={() => transactionHandler("check my transaction history ")}

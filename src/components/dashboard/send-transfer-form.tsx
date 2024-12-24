@@ -64,7 +64,7 @@ const SendTransferForm = ({ initialData, onSuccess, onClose }: SendTransferFormP
           id: (prevMessages.length + 1).toString(),
           sender: "agent",
           content: `Transaction failed: ${errorMessage}. Please check your wallet balance and try again.`,
-          balance: false,
+          balance: { sol: 0, usd: 0 }
         }
       ]);
       setTimeout(() => onClose(), 1000);
