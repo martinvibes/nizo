@@ -4,47 +4,46 @@ import sendbtn from "./sendbtn.svg";
 import Image from "next/image";
 import { useMessages } from "@/contexts/store";
 import { UseLangchainAiResponse } from "@/api/langchain";
-import useTokenSwap from "./swap";
+import { useJupiterSwap } from "@/api/jupiter-swap-example";
 import { useGetBalance } from "@/hook/useGetBalance";
+
 export const Chatinputdiv = () => {
   const { setMessages, setIsLoading, setTransactionType, transactionType } =
     useMessages();
   const { balance } = useGetBalance();
+  const { swap } = useJupiterSwap();
   const [input, setInput] = useState("");
-  const { handleSwap } = useTokenSwap(); // , txResult, error, loading
-  const [inputAmount, setInputAmount] = useState("");
-  const [inputToken, setInputToken] = useState("");
-  const [outputToken, setOutputToken] = useState("");
 
   async function aiResponse(input: string) {
     const airesponse = await UseLangchainAiResponse(input);
     console.log(airesponse);
     // Then add AI's response to messages
-    if (airesponse.intent == "checkBalance"){
+    if (airesponse.intent == "checkBalance") {
       setMessages((prevMessages) => [
         ...prevMessages,
         {
           id: (prevMessages.length + 1).toString(),
           sender: "agent",
           content: balance.toString(),
-          balance:true,
+          balance: true,
         },
       ]);
       setIsLoading(false);
       console.log("Transfer intent detected");
-      return
+      return;
     }
-      if (airesponse?.generalResponse) {
-        // setMessages((prevMessages) => [
-        //   ...prevMessages,
-        //   {
-        //     id: (prevMessages.length + 1).toString(),
-        //     sender: "agent",
-        //     content: airesponse.generalResponse,
-        //   },
-        // ]);
-        // setIsLoading(false);
-      }
+    if (airesponse?.generalResponse) {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          id: (prevMessages.length + 1).toString(),
+          sender: "agent",
+          content: airesponse.generalResponse,
+          balance: false,
+        },
+      ]);
+      setIsLoading(false);
+    }
 
     switch (airesponse.intent) {
       case "swap":
@@ -53,18 +52,18 @@ export const Chatinputdiv = () => {
           airesponse.sourceToken ||
           airesponse.destinationToken
         ) {
-          console.log("this is an intent to swap tokens");
-          console.log("Swap intent detected");
-          setInputAmount(airesponse.amount ? airesponse.amount.toString() : "");
-          setInputToken(
-            airesponse.sourceToken ? airesponse.sourceToken.toString() : ""
-          );
-          setOutputToken(
-            airesponse.destinationToken
-              ? airesponse.destinationToken.toString()
-              : ""
-          );
-          await handleSwap(inputAmount, inputToken, outputToken);
+          try {
+            // Swap 1 SOL for USDC
+            const txid = await swap({
+              inputAmount: (airesponse.amount ?? 0.0001) * 1_000_000_000, // 1 SOL (in lamports)
+              inputMint: "So11111111111111111111111111111111111111112",
+              outputMint: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+              slippageBps: 50, // 0.5% slippage
+            });
+            console.log("Swap successful! Transaction ID:", txid);
+          } catch (err) {
+            console.error("Swap failed:", err);
+          }
         }
         break;
       case "checkBalance":
@@ -76,7 +75,7 @@ export const Chatinputdiv = () => {
           {
             id: (prevMessages.length + 1).toString(),
             sender: "agent",
-            content: balance.toString(),
+            content: `Hey there, your balance is  ${balance.toString()} `,
             balance: true,
           },
         ]);
@@ -126,7 +125,7 @@ export const Chatinputdiv = () => {
         id: (prevMessages.length + 1).toString(),
         sender: "user",
         content: input,
-        balance:false,
+        balance: false,
       },
     ]);
     setInput("");
