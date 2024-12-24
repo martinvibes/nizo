@@ -5,15 +5,15 @@ const COLORS = ["#FFBC66", "#645BE2", "#66FFEF", "#B6689E", "#538434"]; // Color
 
 type ChartData = {
   name: string;
-  value: number;
+  value: number | number | string | null;
 }[];
 
 interface DonutChartProps {
   data: ChartData;
-  total: number;
+  //total: number;
 }
 
-const DonutChart: React.FC<DonutChartProps> = ({ data, total }) => {
+const DonutChart: React.FC<DonutChartProps> = ({ data }) => {
   return (
     <div
       className="w-full bg-[#645BE2]"
@@ -24,10 +24,10 @@ const DonutChart: React.FC<DonutChartProps> = ({ data, total }) => {
         borderRadius: "8px",
       }}
     >
-      <div className="flex justify-between items-center font-normal text-[18px] text-white capitalize">
+      {/* <div className="flex justify-between items-center font-normal text-[18px] text-white capitalize">
         <h4>Total Amount</h4>
-        <h2>{total.toLocaleString()} USD</h2>
-      </div>
+        <h2>{total.toLocaleString()} SOL</h2>
+      </div> */}
       <div className="flex justify-between items-center">
         <PieChart width={200} height={200}>
           <Pie

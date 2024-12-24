@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const WalletAdapterProvider = ({ children }: Props) => {
-  const endpoint = clusterApiUrl("devnet");
+  const endpoint = clusterApiUrl("mainnet-beta");
   const wallets = useMemo(() => [], []);
 
   return (

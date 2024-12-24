@@ -4,9 +4,8 @@ import React, { createContext, useContext, useState } from 'react';
 
 interface Message {
     id: string;
-    content: string;
+    content: string | number | null;
     sender: 'user' | 'agent' | 'chart';
-    balance:boolean
 }
 
 type MessageContextType = {

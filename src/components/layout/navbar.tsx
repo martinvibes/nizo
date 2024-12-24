@@ -19,7 +19,7 @@ import { Button } from "../ui/button";
 import { ChevronDown } from "lucide-react";
 import ContactIcon from "../icons/contacts-icon";
 import ContactList from "../contact-list/contact-list";
-import { useGetBalance } from "@/hook/useGetBalance";
+import logo from "../../../public/svg nizo logo.svg"
 
 const NavBar = () => {
   const { setVisible } = useWalletModal();
@@ -27,7 +27,6 @@ const NavBar = () => {
   // const { connection } = useConnection();
   // console.log(connection);
   const [slicedPublicKey, setSlicedPublicKey] = useState("");
-  const { balance } = useGetBalance();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -49,12 +48,9 @@ const NavBar = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4 md:gap-8">
               <Link href={"/"}>
-                <h1 className="text-xl md:text-[28px] font-bold bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                  NIZO
-                </h1>
+                <Image src={logo} alt="nizo" priority className="w-[55px] h-10" />
               </Link>
             </div>
-
             <div>
               <Link href={"/price-feeds"}>
                 <h2 className="text-base md:text-lg font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
@@ -65,10 +61,7 @@ const NavBar = () => {
 
             <div className="flex items-center gap-2">
               {connected ? <ContactIcon close={contactListHandle} /> : ""}
-
-              <h2 className="mr-2">
-                {connected ? " Balance: " + balance + " SOL" : ""}
-              </h2>
+              
               {/* <WalletMultiButton /> */}
               {!connected && (
                 <button
