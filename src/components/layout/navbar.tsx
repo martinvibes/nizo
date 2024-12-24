@@ -24,7 +24,7 @@ const NavBar = () => {
   const { setVisible } = useWalletModal();
   const { connected, disconnect, publicKey, wallet } = useWallet();
   // const { connection } = useConnection();
-   // console.log(connection);
+  // console.log(connection);
   const [slicedPublicKey, setSlicedPublicKey] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -34,7 +34,6 @@ const NavBar = () => {
     const base58 = publicKey.toBase58();
     setSlicedPublicKey(base58.slice(0, 4) + ".." + base58.slice(-4));
   }, [publicKey]);
-
 
   function contactListHandle() {
     setIsOpen((prev) => !prev);
@@ -53,6 +52,15 @@ const NavBar = () => {
                 </h1>
               </Link>
             </div>
+
+            <div>
+              <Link href={"/price-feeds"}>
+                <h2 className="text-base md:text-lg font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 bg-clip-text text-transparent">
+                  Price feeds
+                </h2>
+              </Link>
+            </div>
+
             <div className="flex items-center gap-2">
               {connected ? <ContactIcon close={contactListHandle} /> : ""}
               
@@ -95,7 +103,7 @@ const NavBar = () => {
                       <ChevronDown className="h-[16px] w-[16px]" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-48 bg-[#18191B] rounded-lg border mt-2 border-neutral-800">
+                  <DropdownMenuContent className="w-48 z-30 bg-[#18191B] rounded-lg border mt-2 border-neutral-800">
                     <DropdownMenuLabel className="text-sm text-neutral-500 px-3 py-2">
                       My Account
                     </DropdownMenuLabel>

@@ -7,7 +7,7 @@ import { useGSAP } from "@gsap/react";
 import { useMessages } from "@/contexts/store";
 
 function AvailabeFeatures() {
-  const {setTransactionType} = useMessages()
+  const { setTransactionType } = useMessages();
   const cardRef = useRef<HTMLDivElement>(null);
   // const swapRef = useRef(null);
   // const balanceRef = useRef(null);
@@ -33,8 +33,8 @@ function AvailabeFeatures() {
     });
   });
 
-  function transactionHandler(data:string){
-    setTransactionType(data)
+  function transactionHandler(data: string) {
+    setTransactionType(data);
   }
 
   return (
@@ -63,6 +63,12 @@ function AvailabeFeatures() {
           className="bg-[#13151D] border border-[#3D435C] text-[#51586D] text-base font-semibold btn"
         >
           View transactions
+        </Button>
+        <Button
+          onClick={() => transactionHandler("Check price feeds")}
+          className="bg-[#13151D] border border-[#3D435C] text-[#51586D] text-base font-semibold btn"
+        >
+          Check pricefeeds
         </Button>
       </div>
     </Card>

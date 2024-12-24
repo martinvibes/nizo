@@ -1,5 +1,5 @@
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Connection } from "@solana/web3.js";
+import { Connection, clusterApiUrl } from "@solana/web3.js";
 import { useEffect, useState } from "react";
 
 export function useGetBalance() {
@@ -28,5 +28,5 @@ export function useGetBalance() {
     fetchBalance();
   }, [publicKey]);
 
-  return {balance};
+  return { balance };
 }
