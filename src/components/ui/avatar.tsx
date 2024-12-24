@@ -65,9 +65,9 @@ function AvatarDemo() {
     <Avatar className="w-[200px] h-[200px] mx-auto">
       {/* <AvatarImage src="../../../public/photo.png" alt="Colm Tuite" /> */}
       <Image src={array[randomNumber]} alt="avatar" />
-      <AvatarFallback className="AvatarFallback" delayMs={600}>
-        CT
-      </AvatarFallback>
+      {/* <AvatarFallback className="AvatarFallback" delayMs={600}>
+        user
+      </AvatarFallback> */}
     </Avatar>
   );
 }

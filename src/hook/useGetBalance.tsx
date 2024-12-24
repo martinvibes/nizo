@@ -1,5 +1,5 @@
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Connection, clusterApiUrl } from "@solana/web3.js";
+import { Connection } from "@solana/web3.js";
 import { useEffect, useState } from "react";
 
 export function useGetBalance() {
@@ -12,7 +12,10 @@ export function useGetBalance() {
     }
 
     // Create a connection to the Solana network
-    const connection = new Connection("","confirmed");
+    const connection = new Connection(
+      // process.env.NEXT_PUBLIC_SOL_RPC_URL,
+      "confirmed"
+    );
 
     const fetchBalance = async () => {
       try {

@@ -16,20 +16,19 @@ export const Chatinputdiv = () => {
 
   async function aiResponse(input: string) {
     const airesponse = await UseLangchainAiResponse(input);
-    console.log(airesponse);
+    setIsLoading(true);
     // Then add AI's response to messages
     if (airesponse.intent == "checkBalance") {
       setMessages((prevMessages) => [
         ...prevMessages,
         {
           id: (prevMessages.length + 1).toString(),
-          sender: "agent",
-          content: balance.toString(),
-          balance: true,
+          sender: "chart",
+          content: balance,
+          // balance: true,
         },
       ]);
       setIsLoading(false);
-      console.log("Transfer intent detected");
       return;
     }
     if (airesponse?.generalResponse) {
@@ -75,7 +74,7 @@ export const Chatinputdiv = () => {
           {
             id: (prevMessages.length + 1).toString(),
             sender: "agent",
-            content: `Hey there, your balance is  ${balance.toString()} `,
+            content: `Hey there, your balance is  ${balance} `,
             balance: true,
           },
         ]);
@@ -104,7 +103,6 @@ export const Chatinputdiv = () => {
           id: (prevMessages.length + 1).toString(),
           sender: "user",
           content: transactionType,
-          balance: false,
         },
       ]);
       aiResponse(transactionType);
