@@ -7,9 +7,7 @@ import NavBar from "../layout/navbar";
 
 function Dashboard() {
   const [transactionHistory] = useState([
-    "Swap tokens - 0.02 SOL to 150 DOGE",
-    "Swap tokens - 0.05 SOL to 375 DOGE",
-    "Swap tokens - 0.03 SOL to 225 DOGE",
+    "Nothing Here Yet",
   ]);
 
   // function addNewTransaction(newData:string) {
