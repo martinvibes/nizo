@@ -33,9 +33,8 @@ export const Chatpage = () => {
                 total={message.balance.usd}
               />
             )}
-            {message.sender === 'chart' && message.content.includes('amount') && (
+            {message.sender === 'agent' && message.content.includes('transfer') && (
               <SendTransactionForm 
-                initialData={JSON.parse(message.content)}
                 onSuccess={() => {
                   setMessages(prev => [...prev, {
                     id: (prev.length + 1).toString(),

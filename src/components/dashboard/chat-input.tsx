@@ -11,13 +11,14 @@ import { useWallet } from "@solana/wallet-adapter-react";
 
 export const Chatinputdiv = () => {
   const { publicKey } = useWallet();
-  const { setMessages, setIsLoading, setTransactionType, transactionType } =
+  const { setMessages, setIsLoading, setTransactionType, transactionType,setFormData } =
     useMessages();
   const { balance } = useGetBalance();
   const { swap } = useJupiterSwap();
   const [input, setInput] = useState("");
 
   const handleAiResponse = async (inputText: string) => {
+    setIsLoading(true);
     if (!publicKey) {
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -33,22 +34,7 @@ export const Chatinputdiv = () => {
     }
 
     const airesponse = await UseLangchainAiResponse(inputText);
-    setIsLoading(true);
 
-    if (airesponse.intent == "checkBalance") {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          id: (prevMessages.length + 1).toString(),
-          sender: "chart",
-          content: "",
-          balance: balance,
-        },
-      ]);
-      setIsLoading(false);
-      toast.success("successfully check your balance");
-      return;
-    }
     if (airesponse?.generalResponse) {
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -84,52 +70,46 @@ export const Chatinputdiv = () => {
             toast.success("Swap successful!");
           } catch (err) {
             console.error("Swap failed:", err);
+            toast.error("Swap failed plrase try again");
           }
         }
         break;
       case "checkBalance":
-        console.log("Check balance intent detected");
-        break;
-      case "transfer":
-        // Extract amount and address from the message if provided
-        const transferMatch = input.match(/transfer\s+(\d+\.?\d*)\s+SOL\s+to\s+([^\s]+)/i);
-        if (transferMatch) {
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            {
-              id: (prevMessages.length + 2).toString(),
-              sender: "chart",
-              content: JSON.stringify({
-                amount: parseFloat(transferMatch[1]),
-                address: transferMatch[2],
-                currency: "SOL"
-              }),
-              balance: { sol: 0, usd: 0 }
-            }
-          ]);
-        } else {
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            {
-              id: (prevMessages.length + 1).toString(),
-              sender: "agent",
-              content: "Please provide amount and address (e.g., 'transfer 1 SOL to address')",
-              balance: { sol: 0, usd: 0 }
-            }
-          ]);
-        }
-        setIsLoading(false);
-        break;
-      case "error":
         setMessages((prevMessages) => [
           ...prevMessages,
           {
             id: (prevMessages.length + 1).toString(),
-            sender: "agent",
-            content: `Transaction failed: ${airesponse.error}. Please try again or check your wallet balance.`,
-            balance: { sol: 0, usd: 0 }
-          }
+            sender: "chart",
+            content: "",
+            balance: balance,
+          },
         ]);
+        setIsLoading(false);
+        toast.success("successfully check your balance");
+        break;
+      case "transfer":
+        // Extract amount and address from the message if provided
+        const transferMatch = input.match(/transfer\s+(\d+\.?\d*)\s+SOL\s+to\s+([^\s]+)/i);
+        console.log(transferMatch) 
+        if(transferMatch !== undefined){
+          setFormData({
+            amount: parseFloat(transferMatch[1]) ?? 0,
+            address: transferMatch[2] ?? "",
+            currency:"sol",
+          });
+        }
+        setIsLoading(false);
+        break;
+      case "error":
+        // setMessages((prevMessages) => [
+        //   ...prevMessages,
+        //   {
+        //     id: (prevMessages.length + 1).toString(),
+        //     sender: "agent",
+        //     content: `Transaction failed: ${airesponse.error}. Please try again or check your wallet balance.`,
+        //     balance: { sol: 0, usd: 0 }
+        //   }
+        // ]);
         setIsLoading(false);
         break;
       case "normalChat":
@@ -163,7 +143,8 @@ export const Chatinputdiv = () => {
       setTransactionType("");
       setIsLoading(false);
     };
-  }, [transactionType, setTransactionType, setIsLoading, setMessages, handleAiResponse]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transactionType, setTransactionType, setIsLoading, setMessages]);
 
   const handleInputSubmit = async () => {
     if (input.trim() === "") return;

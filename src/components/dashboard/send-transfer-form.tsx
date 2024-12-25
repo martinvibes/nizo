@@ -1,35 +1,30 @@
 import { useState } from "react";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { 
   PublicKey, 
   Transaction, 
   LAMPORTS_PER_SOL,
-  SystemProgram 
+  SystemProgram, 
+  Connection
 } from "@solana/web3.js";
 import { useMessages } from "@/contexts/store";
+import toast from "react-hot-toast";
 
 interface SendTransferFormProps {
-  initialData: {
-    amount: number;
-    address: string;
-    currency: string;
-  };
   onSuccess: () => void;
   onClose: () => void;
 }
 
-const SendTransferForm = ({ initialData, onSuccess, onClose }: SendTransferFormProps) => {
-  const { connection } = useConnection();
+const SendTransferForm = ({ onSuccess, onClose }: SendTransferFormProps) => {
+  const {formData:data,setFormData:setData } = useMessages()
   const { publicKey, sendTransaction } = useWallet();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    address: initialData.address,
-    amount: initialData.amount,
-    currency: initialData.currency
-  });
-  const { setMessages } = useMessages();
-
+    address: data.address ?? "",
+    amount: data.amount ?? 0,
+    currency: data.currency ?? "sol"
+  })
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!publicKey) {
@@ -41,6 +36,12 @@ const SendTransferForm = ({ initialData, onSuccess, onClose }: SendTransferFormP
     setError(null);
 
     try {
+      // Create a connection to the Solana network
+      const connection = new Connection(
+        process.env.NEXT_PUBLIC_SOL_RPC_URL ||
+          "https://mainnet.helius-rpc.com/?api-key=bad30ab6-a17a-421d-ae79-a7bc47f9fea3",
+        "confirmed"
+      );
       const recipientPubKey = new PublicKey(formData.address);
       const transaction = new Transaction().add(
         SystemProgram.transfer({
@@ -49,27 +50,23 @@ const SendTransferForm = ({ initialData, onSuccess, onClose }: SendTransferFormP
           lamports: formData.amount * LAMPORTS_PER_SOL,
         })
       );
-
+// transfer 10 sol to BzgTKF85WRscHGYZUF7qBjjhe4tjYz89K5k9bVbk15CV
       const signature = await sendTransaction(transaction, connection);
       await connection.confirmTransaction(signature, "confirmed");
+      toast.success("transfer successful");
       onSuccess();
       onClose();
     } catch (err) {
-      console.error("Transaction failed:", err);
       const errorMessage = err instanceof Error ? err.message : "Transaction failed";
       setError(errorMessage);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          id: (prevMessages.length + 1).toString(),
-          sender: "agent",
-          content: `Transaction failed: ${errorMessage}. Please check your wallet balance and try again.`,
-          balance: { sol: 0, usd: 0 }
-        }
-      ]);
-      setTimeout(() => onClose(), 1000);
+      setTimeout(() => onClose(), 4000);
     } finally {
       setIsLoading(false);
+       setData({
+         amount: 0,
+         address: "",
+         currency: "",
+       });
     }
   };
 
