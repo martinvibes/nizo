@@ -82,7 +82,7 @@ function AvailabeFeatures() {
           View transactions
         </Button>
         <Button
-          onClick={() => transactionHandler("Check price feeds")}
+          onClick={() => transactionHandler("check pricefeeds")}
           className="bg-[#13151D] border border-[#3D435C] text-[#51586D] text-base font-semibold btn"
         >
           Check pricefeeds

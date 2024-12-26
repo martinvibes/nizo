@@ -26,25 +26,34 @@ export const Chatpage = () => {
               message.sender === "user" ? "bg-[#B6689E]" : "bg-[#645BE2]"
             } px-4 py-3 rounded-[24px] break-words overflow-wrap-anywhere lg:max-w-[700px] md:max-w-[500px] max-w-[300px]`}
           >
-            {message.sender !== "chart" && message.content}
+            {message.sender !== "chart" && (
+              <div
+                dangerouslySetInnerHTML={{ __html: message.content }}
+                className="message-content"
+              />
+            )}
             {message.sender === "chart" && (
               <DonutChart
                 data={[{ name: "sol", value: message.balance.sol }]}
                 total={message.balance.usd}
               />
             )}
-            {message.sender === 'agent' && message.content.includes('transfer') && (
-              <SendTransactionForm 
-                onSuccess={() => {
-                  setMessages(prev => [...prev, {
-                    id: (prev.length + 1).toString(),
-                    sender: 'agent',
-                    content: 'Transfer completed successfully!',
-                    balance: { sol: 0, usd: 0 }
-                  }]);
-                }}
-              />
-            )}
+            {message.sender === "agent" &&
+              message.content.includes("transfer") && (
+                <SendTransactionForm
+                  onSuccess={() => {
+                    setMessages((prev) => [
+                      ...prev,
+                      {
+                        id: (prev.length + 1).toString(),
+                        sender: "agent",
+                        content: "Transfer completed successfully!",
+                        balance: { sol: 0, usd: 0 },
+                      },
+                    ]);
+                  }}
+                />
+              )}
           </div>
         </div>
       ))}
