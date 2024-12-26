@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { 
-  PublicKey, 
-  Transaction, 
+import {
+  PublicKey,
+  Transaction,
   LAMPORTS_PER_SOL,
-  SystemProgram, 
-  Connection
+  SystemProgram,
+  Connection,
 } from "@solana/web3.js";
 import { useMessages } from "@/contexts/store";
 import toast from "react-hot-toast";
@@ -16,15 +16,15 @@ interface SendTransferFormProps {
 }
 
 const SendTransferForm = ({ onSuccess, onClose }: SendTransferFormProps) => {
-  const {formData:data,setFormData:setData } = useMessages()
+  const { formData: data, setFormData: setData } = useMessages();
   const { publicKey, sendTransaction } = useWallet();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     address: data.address ?? "",
     amount: data.amount ?? 0,
-    currency: data.currency ?? "sol"
-  })
+    currency: data.currency ?? "sol",
+  });
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!publicKey) {
@@ -50,37 +50,52 @@ const SendTransferForm = ({ onSuccess, onClose }: SendTransferFormProps) => {
           lamports: formData.amount * LAMPORTS_PER_SOL,
         })
       );
-// transfer 10 sol to BzgTKF85WRscHGYZUF7qBjjhe4tjYz89K5k9bVbk15CV
+      // transfer 10 sol to BzgTKF85WRscHGYZUF7qBjjhe4tjYz89K5k9bVbk15CV
       const signature = await sendTransaction(transaction, connection);
       await connection.confirmTransaction(signature, "confirmed");
       toast.success("transfer successful");
       onSuccess();
       onClose();
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Transaction failed";
+      const errorMessage =
+        err instanceof Error ? err.message : "Transaction failed";
       setError(errorMessage);
       setTimeout(() => onClose(), 4000);
     } finally {
       setIsLoading(false);
-       setData({
-         amount: 0,
-         address: "",
-         currency: "",
-       });
+      setData({
+        amount: 0,
+        address: "",
+        currency: "",
+      });
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData(prev => ({
+  const handleClose = () => {
+    toast.success("Transfer cancelled");
+    onClose();
+    setData({
+      amount: 0,
+      address: "",
+      currency: "",
+    });
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
   };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
       <div className="bg-[#1A1B1F] rounded-lg p-6 max-w-md w-full border border-gray-700">
-        <h2 className="text-xl font-semibold mb-4 text-white">Confirm Transfer</h2>
+        <h2 className="text-xl font-semibold mb-4 text-white">
+          Confirm Transfer
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-200 mb-1">
@@ -127,7 +142,9 @@ const SendTransferForm = ({ onSuccess, onClose }: SendTransferFormProps) => {
           </div>
 
           {error && (
-            <div className="text-red-400 text-sm bg-red-900/50 p-2 rounded">{error}</div>
+            <div className="text-red-400 text-sm bg-red-900/50 p-2 rounded">
+              {error}
+            </div>
           )}
 
           <div className="flex gap-4">
@@ -135,16 +152,14 @@ const SendTransferForm = ({ onSuccess, onClose }: SendTransferFormProps) => {
               type="submit"
               disabled={isLoading}
               className={`flex-1 py-2 px-4 rounded-md ${
-                isLoading
-                  ? "bg-blue-600/50"
-                  : "bg-blue-600 hover:bg-blue-700"
+                isLoading ? "bg-blue-600/50" : "bg-blue-600 hover:bg-blue-700"
               } text-white`}
             >
               {isLoading ? "Processing..." : "Confirm"}
             </button>
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               className="flex-1 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-md text-white"
             >
               Cancel
@@ -156,4 +171,4 @@ const SendTransferForm = ({ onSuccess, onClose }: SendTransferFormProps) => {
   );
 };
 
-export default SendTransferForm; 
+export default SendTransferForm;
