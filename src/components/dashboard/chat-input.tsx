@@ -11,8 +11,13 @@ import { useWallet } from "@solana/wallet-adapter-react";
 
 export const Chatinputdiv = () => {
   const { publicKey } = useWallet();
-  const { setMessages, setIsLoading, setTransactionType, transactionType,setFormData } =
-    useMessages();
+  const {
+    setMessages,
+    setIsLoading,
+    setTransactionType,
+    transactionType,
+    setFormData,
+  } = useMessages();
   const { balance } = useGetBalance();
   const { swap } = useJupiterSwap();
   const [input, setInput] = useState("");
@@ -89,13 +94,15 @@ export const Chatinputdiv = () => {
         break;
       case "transfer":
         // Extract amount and address from the message if provided
-        const transferMatch = input.match(/transfer\s+(\d+\.?\d*)\s+SOL\s+to\s+([^\s]+)/i);
-        console.log(transferMatch) 
-        if(transferMatch !== undefined){
+        const transferMatch = input.match(
+          /transfer\s+(\d+\.?\d*)\s+SOL\s+to\s+([^\s]+)/i
+        );
+        console.log(transferMatch);
+        if (transferMatch !== null) {
           setFormData({
             amount: parseFloat(transferMatch[1]) ?? 0,
             address: transferMatch[2] ?? "",
-            currency:"sol",
+            currency: "sol",
           });
         }
         setIsLoading(false);
@@ -134,8 +141,8 @@ export const Chatinputdiv = () => {
           id: (prevMessages.length + 1).toString(),
           sender: "user",
           content: transactionType,
-          balance: { sol: 0, usd: 0 }
-        }
+          balance: { sol: 0, usd: 0 },
+        },
       ]);
       handleAiResponse(transactionType);
     }
@@ -143,7 +150,7 @@ export const Chatinputdiv = () => {
       setTransactionType("");
       setIsLoading(false);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transactionType, setTransactionType, setIsLoading, setMessages]);
 
   const handleInputSubmit = async () => {
