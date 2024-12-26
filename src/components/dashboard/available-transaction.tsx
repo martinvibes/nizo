@@ -41,7 +41,7 @@ function AvailabeFeatures() {
       toast.error("Wallet not connected");
       return;
     }
-    if (data.includes("transaction") || data.includes("transfer")) {
+    if (data.includes("transaction")) {
       toast.error("feature in development try other NIZO features");
       return;
     }

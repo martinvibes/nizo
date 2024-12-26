@@ -11,52 +11,35 @@ import { useWallet } from "@solana/wallet-adapter-react";
 
 export const Chatinputdiv = () => {
   const { publicKey } = useWallet();
-  const { setMessages, setIsLoading, setTransactionType, transactionType } =
-    useMessages();
+  const {
+    setMessages,
+    setIsLoading,
+    setTransactionType,
+    transactionType,
+    setFormData,
+  } = useMessages();
   const { balance } = useGetBalance();
   const { swap } = useJupiterSwap();
   const [input, setInput] = useState("");
-  async function aiResponse(input: string) {
+
+  const handleAiResponse = async (inputText: string) => {
+    setIsLoading(true);
     if (!publicKey) {
       setMessages((prevMessages) => [
         ...prevMessages,
         {
           id: (prevMessages.length + 1).toString(),
           sender: "agent",
-          content: `
-          To interact with Nizo AI and unlock personalized features, please connect your Solana wallet.
-          By connecting your wallet, you can:
-          Securely verify your identity.
-          Access AI-powered tools and resources tailored to your account.
-          Seamlessly manage your on-chain interactions.
-          Your wallet connection is safe and secure—Nizo AI will never store your private keys or compromise your assets.
-          Click the "Connect Wallet" button to get started!`,
-          balance: {
-            sol: 0,
-            usd: 0,
-          },
+          content: `Please connect your wallet first...`,
+          balance: { sol: 0, usd: 0 },
         },
       ]);
       setIsLoading(false);
       return;
     }
-    const airesponse = await UseLangchainAiResponse(input);
-    setIsLoading(true);
-    // Then add AI's response to messages
-    if (airesponse.intent == "checkBalance") {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          id: (prevMessages.length + 1).toString(),
-          sender: "chart",
-          content: "",
-          balance: balance,
-        },
-      ]);
-      setIsLoading(false);
-      toast.success("successfully check your balance");
-      return;
-    }
+
+    const airesponse = await UseLangchainAiResponse(inputText);
+
     if (airesponse?.generalResponse) {
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -92,27 +75,49 @@ export const Chatinputdiv = () => {
             toast.success("Swap successful!");
           } catch (err) {
             console.error("Swap failed:", err);
+            toast.error("Swap failed plrase try again");
           }
         }
         break;
       case "checkBalance":
-        console.log("Check balance intent detected");
-        break;
-      case "transfer":
         setMessages((prevMessages) => [
           ...prevMessages,
           {
             id: (prevMessages.length + 1).toString(),
-            sender: "agent",
-            content: `Hey there, your balance is  ${balance} `,
-            balance: {
-              sol: 0,
-              usd: 0,
-            },
+            sender: "chart",
+            content: "",
+            balance: balance,
           },
         ]);
         setIsLoading(false);
-        console.log("Transfer intent detected");
+        toast.success("successfully check your balance");
+        break;
+      case "transfer":
+        // Extract amount and address from the message if provided
+        const transferMatch = input.match(
+          /transfer\s+(\d+\.?\d*)\s+SOL\s+to\s+([^\s]+)/i
+        );
+        console.log(transferMatch);
+        if (transferMatch !== null) {
+          setFormData({
+            amount: parseFloat(transferMatch[1]) ?? 0,
+            address: transferMatch[2] ?? "",
+            currency: "sol",
+          });
+        }
+        setIsLoading(false);
+        break;
+      case "error":
+        // setMessages((prevMessages) => [
+        //   ...prevMessages,
+        //   {
+        //     id: (prevMessages.length + 1).toString(),
+        //     sender: "agent",
+        //     content: `Transaction failed: ${airesponse.error}. Please try again or check your wallet balance.`,
+        //     balance: { sol: 0, usd: 0 }
+        //   }
+        // ]);
+        setIsLoading(false);
         break;
       case "normalChat":
         console.log("Normal chat intent detected");
@@ -125,7 +130,7 @@ export const Chatinputdiv = () => {
         console.log("Unknown intent");
         break;
     }
-  }
+  };
 
   useEffect(() => {
     if (transactionType !== "") {
@@ -136,13 +141,10 @@ export const Chatinputdiv = () => {
           id: (prevMessages.length + 1).toString(),
           sender: "user",
           content: transactionType,
-          balance: {
-            sol: 0,
-            usd: 0,
-          },
+          balance: { sol: 0, usd: 0 },
         },
       ]);
-      aiResponse(transactionType);
+      handleAiResponse(transactionType);
     }
     return () => {
       setTransactionType("");
@@ -168,7 +170,7 @@ export const Chatinputdiv = () => {
     ]);
     setInput("");
 
-    await aiResponse(input);
+    await handleAiResponse(input);
   };
 
   const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>): void => {

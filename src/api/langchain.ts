@@ -16,13 +16,13 @@ export async function UseLangchainAiResponse(question: string) {
     model: "gpt-4o-mini",
     temperature: 0,
     apiKey: process.env.NEXT_PUBLIC_LANGCHAIN_API_KEY,
+    
   });
 
-  const formatInstructions = `Analyze the user's input and categorize it:
-      - If it's a DeFi action (swap, transfer, check balance), extract specific parameters
-      - For general questions about the platform, use the provided website context
-      - Handle various types of inputs flexibly
-      - Provide clear, enguaging concise, and helpful responses`;
+  const formatInstructions = `For transfer requests:
+    - If user mentions 'transfer', ask for amount and recipient address
+    - If user provides amount and address in format like "transfer 1 SOL to address", extract these details
+    - Keep responses concise`;
 
   const generalResponseDesc = ` Examine the feedback provided by the user and craft a response that is easy to understand, addressing their prompt thoughtfully. Alo make it enguaging `;
 
@@ -33,6 +33,8 @@ export async function UseLangchainAiResponse(question: string) {
     amount: z.number().optional(),
     sourceToken: z.string().optional(),
     destinationToken: z.string().optional(),
+    recipientAddress: z.string().optional(),
+    transferCurrency: z.enum(["SOL", "USDT"]).optional(),
     error: z.string().optional(),
     generalResponse: z.string().describe(generalResponseDesc),
   });
@@ -66,6 +68,8 @@ export async function UseLangchainAiResponse(question: string) {
       amount: intentResult.amount,
       sourceToken: intentResult.sourceToken,
       destinationToken: intentResult.destinationToken,
+      recipientAddress: intentResult.recipientAddress,
+      transferCurrency: intentResult.transferCurrency,
       error: intentResult.error,
       generalResponse: intentResult.generalResponse,
     };

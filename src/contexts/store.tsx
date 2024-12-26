@@ -7,6 +7,12 @@ type balance = {
   usd: number;
 };
 
+type form = {
+  amount: number | null;
+  address: string | null;
+  currency: string;
+};
+
 interface Message {
     id: string;
     content: string;
@@ -20,7 +26,9 @@ type MessageContextType = {
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   transactionType: string;
-  setTransactionType:React.Dispatch<React.SetStateAction<string>>;
+  setTransactionType: React.Dispatch<React.SetStateAction<string>>;
+  formData: form;
+  setFormData: React.Dispatch<React.SetStateAction<form>>;
 };
 
 const MessageContext = createContext<MessageContextType | undefined>(undefined);
@@ -29,8 +37,13 @@ export function MessageProvider({ children }: { children: React.ReactNode }) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading,setIsLoading] = useState(false)
     const [transactionType, setTransactionType] = useState("");
+    const [formData, setFormData] = useState<form>({
+        amount:0,
+        address:"",
+        currency:""
+    })
     return (
-        <MessageContext.Provider value={{ messages, setMessages,isLoading,setIsLoading,transactionType,setTransactionType }}>
+        <MessageContext.Provider value={{ messages, setMessages,isLoading,setIsLoading,transactionType,setTransactionType,formData,setFormData }}>
             {children}
         </MessageContext.Provider>
     );
