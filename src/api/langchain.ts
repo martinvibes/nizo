@@ -16,7 +16,6 @@ export async function UseLangchainAiResponse(question: string) {
     model: "gpt-4o-mini",
     temperature: 0,
     apiKey: process.env.NEXT_PUBLIC_LANGCHAIN_API_KEY,
-    
   });
 
   const formatInstructions = `For transfer requests:
@@ -28,7 +27,14 @@ export async function UseLangchainAiResponse(question: string) {
 
   const IntentSchema = z.object({
     intent: z
-      .enum(["swap", "checkBalance", "transfer", "normalChat", "unknown"])
+      .enum([
+        "swap",
+        "checkBalance",
+        "transfer",
+        "check pricefeeds",
+        "normalChat",
+        "unknown",
+      ])
       .describe(formatInstructions),
     amount: z.number().optional(),
     sourceToken: z.string().optional(),

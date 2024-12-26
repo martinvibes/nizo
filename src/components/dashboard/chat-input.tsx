@@ -40,6 +40,20 @@ export const Chatinputdiv = () => {
 
     const airesponse = await UseLangchainAiResponse(inputText);
 
+    if (airesponse.intent === "check pricefeeds") {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          id: (prevMessages.length + 1).toString(),
+          sender: "agent",
+          content: `Click <a href="/price-feeds" class="text-[#cf209b] hover:text-purple-400 text-lg font-semibold underline">here</a> to check real-time prices for various tokens including SOL, USDC, and other major cryptocurrencies in our price feeds section.`,
+          balance: { sol: 0, usd: 0 },
+        },
+      ]);
+      setIsLoading(false);
+      return; // Exit early for price feeds
+    }
+
     if (airesponse?.generalResponse) {
       setMessages((prevMessages) => [
         ...prevMessages,
