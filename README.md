@@ -20,6 +20,25 @@ Try [NIZO](https://nizo-sol.vercel.app)
 - Dark mode support
 - Contact management system
 
+## 🔮 Future Features
+
+- Smart Contact Management
+
+  - Save and manage frequently used wallet addresses
+  - Execute transactions using contact names instead of addresses
+  - Simplified peer-to-peer transfers through natural language commands like "Send 2 SOL to John"
+  - Secure address book storage with encryption
+
+- Voice Interaction & Accessibility
+
+  - Full voice command support for all DeFi operations
+  - Screen reader optimization for visually impaired users
+  - Voice feedback for transaction confirmations and balance checks
+  - Natural speech processing for complex DeFi operations
+  - Multi-language voice support for global accessibility
+
+These features align with our mission to make DeFi operations more accessible and user-friendly for everyone, regardless of technical expertise or physical abilities.
+
 ## 📋 Technical Documentation
 
 System Architecture
@@ -62,7 +81,7 @@ export const WalletAdapterProvider = ({ children }: Props) => {
 ```typescript
 // src/api/langchain.ts
 const IntentSchema = z.object({
-  intent: z.enum(["swap", "checkBalance", "transfer", "normalChat", "unknown"]),
+  intent: z.enum(['swap', 'checkBalance', 'transfer', 'normalChat', 'unknown']),
   amount: z.number().optional(),
   sourceToken: z.string().optional(),
   destinationToken: z.string().optional(),
@@ -87,11 +106,39 @@ const swap = async ({
 };
 ```
 
+### Switchboard Price Feed Integration
+
+```typescript
+// src/components/dashboard/switch-board-price-feeds.tsx
+const SwitchboardPriceFeed = () => {
+  // Fetch and update price feeds
+  const fetchPrice = async (symbol: string) => {
+    const response = await fetch(
+      `https://www.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`
+    );
+    const data = await response.json();
+    // Update price state
+  };
+
+  // Wallet-verified on-chain price updates
+  const updateFeed = async (feed: SwitchboardFeed) => {
+    const updateIx = {
+      programId: switchboardProgramId,
+      keys: [
+        { pubkey: new PublicKey(feed.address), isWritable: true },
+        { pubkey: publicKey, isSigner: true, isWritable: true },
+      ],
+    };
+    // Execute transaction
+  };
+};
+```
+
 ### LangChain AI Integration
 
 ```typescript
 const model = new ChatOpenAI({
-  model: "gpt-4o-mini",
+  model: 'gpt-4o-mini',
   temperature: 0,
   apiKey: process.env.NEXT_PUBLIC_LANGCHAIN_API_KEY,
 });
@@ -185,6 +232,15 @@ User: "Show my recent transactions"
 NIZO: "Here are your recent transactions: [list of transactions]"
 ```
 
+### Price Feed Operations
+
+```
+User: "What's the current SOL price?"
+NIZO: "The current price of SOL is $XX.XX USD. Would you like me to update this price for you?"
+User: "Yes, update the price"
+NIZO: "I'll update the SOL price feed. Please approve the transaction in your wallet."
+```
+
 ## Supported Intent Types
 
 Based on the implementation in langchain.ts:
@@ -205,8 +261,8 @@ Based on the implementation in langchain.ts:
 
 ```typescript
 const FALLBACK_RPCS = [
-  "https://mainnet.helius-rpc.com/?api-key=YOUR_API_KEY",
-  "https://try-rpc.mainnet.solana.com",
+  'https://mainnet.helius-rpc.com/?api-key=YOUR_API_KEY',
+  'https://try-rpc.mainnet.solana.com',
   // ...
 ];
 ```
@@ -220,7 +276,7 @@ const FALLBACK_RPCS = [
 
 ```typescript
 // Example of transaction security measures
-const confirmation = await connection.confirmTransaction(txid, "confirmed");
+const confirmation = await connection.confirmTransaction(txid, 'confirmed');
 
 if (confirmation.value.err) {
   throw new Error(`Transaction failed: ${confirmation.value.err.toString()}`);
@@ -234,26 +290,13 @@ if (confirmation.value.err) {
 - Limited local storage: We only save basic information like contact names on your device
 - Protected secrets: All sensitive API keys and configurations are securely stored and never exposed to users
 
-## 💻 Project Structure
-
-```
-src/
-├── api/                  # API integrations
-├── app/                  # Next.js pages
-├── components/          # React components
-│   ├── actions/         # Transaction actions
-│   ├── dashboard/       # Dashboard UI
-│   ├── ui/              # Shared UI components
-├── contexts/            # React contexts
-└── lib/                 # Utilities
-```
-
 ## 🛠️ Technology Stack
 
 - Frontend: Next.js 14
 - UI Components: shadcn/ui
 - Blockchain: Solana Web3.js
 - DEX Aggregator: Jupiter Protocol
+- Price Oracle: Switchboard Protocol
 - AI Processing: LangChain with GPT-4 Mini
 - Wallet: Solana Wallet Adapter
 - Styling: Tailwind CSS
