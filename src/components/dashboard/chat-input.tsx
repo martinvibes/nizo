@@ -32,6 +32,7 @@ export const Chatinputdiv = () => {
           sender: "agent",
           content: `Please connect your wallet first...`,
           balance: { sol: 0, usd: 0 },
+          intent:"",
         },
       ]);
       setIsLoading(false);
@@ -40,6 +41,20 @@ export const Chatinputdiv = () => {
 
     const airesponse = await UseLangchainAiResponse(inputText);
 
+    if (airesponse.intent === "checkBalance") {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          id: (prevMessages.length + 1).toString(),
+          sender: "chart",
+          content: "",
+          balance: balance,
+          intent: "",
+        },
+      ]);
+      setIsLoading(false);
+      return;
+    }
     if (airesponse.intent === "check pricefeeds") {
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -48,6 +63,7 @@ export const Chatinputdiv = () => {
           sender: "agent",
           content: `Click <a href="/price-feeds" class="text-[#cf209b] hover:text-purple-400 text-lg font-semibold underline">here</a> to check real-time prices for various tokens including SOL, USDC, and other major cryptocurrencies in our price feeds section.`,
           balance: { sol: 0, usd: 0 },
+          intent: "",
         },
       ]);
       setIsLoading(false);
@@ -55,19 +71,38 @@ export const Chatinputdiv = () => {
     }
 
     if (airesponse?.generalResponse) {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          id: (prevMessages.length + 1).toString(),
-          sender: "agent",
-          content: airesponse.generalResponse,
-          balance: {
-            sol: 0,
-            usd: 0,
+      if(airesponse.intent === "transfer" && airesponse.recipientAddress && airesponse.amount){
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            id: (prevMessages.length + 1).toString(),
+            sender: "agent",
+            content: airesponse.generalResponse,
+            balance: {
+              sol: 0,
+              usd: 0,
+            },
+            intent: airesponse.intent,
           },
-        },
-      ]);
-      setIsLoading(false);
+        ]);
+        setIsLoading(false);
+      }
+      else{
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            id: (prevMessages.length + 1).toString(),
+            sender: "agent",
+            content: airesponse.generalResponse,
+            balance: {
+              sol: 0,
+              usd: 0,
+            },
+            intent: "",
+          },
+        ]);
+        setIsLoading(false);
+      }
     }
 
     switch (airesponse.intent) {
@@ -94,31 +129,19 @@ export const Chatinputdiv = () => {
         }
         break;
       case "checkBalance":
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          {
-            id: (prevMessages.length + 1).toString(),
-            sender: "chart",
-            content: "",
-            balance: balance,
-          },
-        ]);
-        setIsLoading(false);
-        toast.success("successfully check your balance");
         break;
       case "transfer":
         // Extract amount and address from the message if provided
-        const transferMatch = input.match(
-          /transfer\s+(\d+\.?\d*)\s+SOL\s+to\s+([^\s]+)/i
-        );
-        console.log(transferMatch);
-        if (transferMatch !== null) {
-          setFormData({
-            amount: parseFloat(transferMatch[1]) ?? 0,
-            address: transferMatch[2] ?? "",
-            currency: "sol",
-          });
-        }
+        // const transferMatch = input.match(
+        //    /transfer\s+(\d+\.?\d*)\s+SOL\s+to\s+([^\s]+)/i
+        //  ) ?? "";
+        // if (transferMatch !== null) {
+        setFormData({
+          amount: airesponse.amount ?? 0,
+          address: airesponse.recipientAddress ?? "",
+          currency: "sol",
+        });
+        // }
         setIsLoading(false);
         break;
       case "error":
@@ -156,6 +179,7 @@ export const Chatinputdiv = () => {
           sender: "user",
           content: transactionType,
           balance: { sol: 0, usd: 0 },
+          intent:"",
         },
       ]);
       handleAiResponse(transactionType);
@@ -180,6 +204,7 @@ export const Chatinputdiv = () => {
           sol: 0,
           usd: 0,
         },
+        intent:""
       },
     ]);
     setInput("");

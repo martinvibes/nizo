@@ -39,7 +39,7 @@ export const Chatpage = () => {
               />
             )}
             {message.sender === "agent" &&
-              message.content.includes("transfer") && (
+              message.intent === "transfer" && (
                 <SendTransactionForm
                   onSuccess={() => {
                     setMessages((prev) => [
@@ -49,6 +49,7 @@ export const Chatpage = () => {
                         sender: "agent",
                         content: "Transfer completed successfully!",
                         balance: { sol: 0, usd: 0 },
+                        intent:"",
                       },
                     ]);
                   }}

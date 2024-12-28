@@ -17,7 +17,8 @@ interface Message {
     id: string;
     content: string;
     sender: 'user' | 'agent' | 'chart';
-    balance:balance
+    balance:balance,
+    intent: string
 }
 
 type MessageContextType = {
