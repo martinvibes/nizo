@@ -108,17 +108,17 @@ export const Chatinputdiv = () => {
         break;
       case "transfer":
         // Extract amount and address from the message if provided
-        const transferMatch = input.match(
-          /transfer\s+(\d+\.?\d*)\s+SOL\s+to\s+([^\s]+)/i
-        );
-        console.log(transferMatch);
-        if (transferMatch !== null) {
-          setFormData({
-            amount: parseFloat(transferMatch[1]) ?? 0,
-            address: transferMatch[2] ?? "",
-            currency: "sol",
-          });
-        }
+        // const transferMatch = input.match(
+        //   /transfer\s+(\d+\.?\d*)\s+SOL\s+to\s+([^\s]+)/i
+        // );
+        // console.log(transferMatch);
+        // if (transferMatch !== null) {
+        setFormData({
+          amount: parseFloat(transferMatch[1]) ?? 0,
+          address: transferMatch[2] ?? "",
+          currency: "sol",
+        });
+        // }
         setIsLoading(false);
         break;
       case "error":
