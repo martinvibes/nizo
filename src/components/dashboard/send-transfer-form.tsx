@@ -91,7 +91,7 @@ const SendTransferForm = ({ onSuccess, onClose }: SendTransferFormProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-[#1A1B1F] rounded-lg p-6 max-w-md w-full border border-gray-700">
         <h2 className="text-xl font-semibold mb-4 text-white">
           Confirm Transfer
